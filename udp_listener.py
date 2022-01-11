@@ -1,6 +1,7 @@
 import socket
 
-localIP     = "127.0.0.1"
+hostname = socket.gethostname()
+localIP = socket.gethostbyname(hostname)
 localPort   = 20001
 
 bufferSize  = 1024
