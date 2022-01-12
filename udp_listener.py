@@ -47,7 +47,7 @@ bufferSize  = 1024
 UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
 # Bind to address and ip
-
+UDPServerSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 UDPServerSocket.bind((localIP, localPort))
 print("UDP server up and listening on ", localIP) 
 
@@ -82,6 +82,8 @@ def update_graph_live(n):
     y1.append(acc_x)
     y2.append(acc_y)
     y3.append(acc_z)
+    # print(t)
+    # print(y1)
 
     print(f"""
     timestamp = {timestamp}
@@ -103,22 +105,22 @@ def update_graph_live(n):
     fig['layout']['legend'] = {'x': 0, 'y': 1, 'xanchor': 'left'}
 
     fig.append_trace({
-        'x': t,
-        'y': y1,
+        'x': list(t),
+        'y': list(y1),
         'name': 'X-Acceleration',
         'mode': 'lines+markers',
         'type': 'scatter'
     }, 1, 1)
     fig.append_trace({
-        'x': t,
-        'y': y2,
+        'x': list(t),
+        'y': list(y2),
         'name': 'Y-Acceleration',
         'mode': 'lines+markers',
         'type': 'scatter'
     }, 1, 1)
     fig.append_trace({
-        'x': t,
-        'y': y3,
+        'x': list(t),
+        'y': list(y3),
         'name': 'Z-Acceleration',
         'mode': 'lines+markers',
         'type': 'scatter'
