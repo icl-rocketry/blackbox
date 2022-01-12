@@ -1,6 +1,13 @@
 import socket
 import struct
 from dataclasses import dataclass
+import dash
+from dash import dcc
+from dash import html
+import plotly
+from dash.dependencies import Input, Output
+from collections import deque
+
 
 @dataclass
 class SensorData:
@@ -39,6 +46,22 @@ UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
 UDPServerSocket.bind((localIP, localPort))
 print("UDP server up and listening on ", localIP) 
+
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app.layout = html.Div(
+    html.Div([
+        html.H4('Android Sensor Data'),
+        html.Div(id='live-update-text'),
+        dcc.Graph(id='live-update-graph'),
+        dcc.Interval(
+            id='interval-component',
+            interval = 50, # in milliseconds
+            n_intervals=0
+        )
+    ])
+)
 
 
 while(True):
