@@ -12,6 +12,6 @@ while true
         fprintf('Data received\n');
         u.NumBytesAvailable
         data = read(u, u.NumBytesAvailable, "single");
-        
+        data = reshape(data, [], 19);
     end
 end
