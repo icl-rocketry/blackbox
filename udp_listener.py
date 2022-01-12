@@ -33,6 +33,8 @@ class SensorData:
     pressure: float = 0.0
 
 data = SensorData()
+t = deque(maxlen=50)
+y1 = deque(maxlen=50)
 
 hostname = socket.gethostname()
 localIP = socket.gethostbyname(hostname)
@@ -48,13 +50,13 @@ UDPServerSocket.bind((localIP, localPort))
 print("UDP server up and listening on ", localIP) 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+
 app.layout = html.Div(
     html.Div([
-        html.H4('Android Sensor Data'),
+        html.H1('Android Sensor Data'),
         html.Div(id='live-update-text'),
-        dcc.Graph(id='live-update-graph'),
+        dcc.Graph(id='live-update-graph', animate = True),
         dcc.Interval(
             id='interval-component',
             interval = 50, # in milliseconds
@@ -63,17 +65,20 @@ app.layout = html.Div(
     ])
 )
 
+@app.callback(Output('live-update-graph', 'figure'),
+              Input('interval-component', 'n_intervals'))
+def update_graph_live(n):
 
-while(True):
-
+    # get data
     bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
     message = bytesAddressPair[0]
-    # address = bytesAddressPair[1]
-
-    # clientMsg = f"Message from Client: {message.hex()}"
-    # print(clientMsg, len(clientMsg)//2)
     (timestamp, or_x, or_y, or_z, gyro_x, gyro_y, gyro_z, acc_x, acc_y, acc_z, mag_x, mag_y, mag_z, lat, long, alt, temp, lux, pressure) = struct.unpack("fffffffffffffffffff", message)
-    
+    UDPServerSocket.recvfrom(bufferSize)
+
+    # append to deque
+    t.append(timestamp)
+    y1.append(acc_x)
+
     print(f"""
     timestamp = {timestamp}
     orientation = {or_x}, {or_y}, {or_z}
@@ -85,6 +90,3 @@ while(True):
     lux = {lux}
     pressure = {pressure}
     """)
- 
-    # Simulink generated app sends an empty packet after data packet - need to discard
-    UDPServerSocket.recvfrom(bufferSize)
