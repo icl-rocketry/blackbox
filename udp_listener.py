@@ -35,6 +35,8 @@ class SensorData:
 data = SensorData()
 t = deque(maxlen=50)
 y1 = deque(maxlen=50)
+y2 = deque(maxlen=50)
+y3 = deque(maxlen=50)
 
 hostname = socket.gethostname()
 localIP = socket.gethostbyname(hostname)
@@ -78,6 +80,8 @@ def update_graph_live(n):
     # append to deque
     t.append(timestamp)
     y1.append(acc_x)
+    y2.append(acc_y)
+    y3.append(acc_z)
 
     print(f"""
     timestamp = {timestamp}
@@ -90,3 +94,37 @@ def update_graph_live(n):
     lux = {lux}
     pressure = {pressure}
     """)
+
+    # Create the graph with subplots
+    fig = plotly.tools.make_subplots(rows=3, cols=1, vertical_spacing=0.2)
+    fig['layout']['margin'] = {
+        'l': 30, 'r': 10, 'b': 30, 't': 10
+    }
+    fig['layout']['legend'] = {'x': 0, 'y': 1, 'xanchor': 'left'}
+
+    fig.append_trace({
+        'x': t,
+        'y': y1,
+        'name': 'X-Acceleration',
+        'mode': 'lines+markers',
+        'type': 'scatter'
+    }, 1, 1)
+    fig.append_trace({
+        'x': t,
+        'y': y2,
+        'name': 'Y-Acceleration',
+        'mode': 'lines+markers',
+        'type': 'scatter'
+    }, 1, 1)
+    fig.append_trace({
+        'x': t,
+        'y': y3,
+        'name': 'Z-Acceleration',
+        'mode': 'lines+markers',
+        'type': 'scatter'
+    }, 1, 1)
+
+    return fig
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
