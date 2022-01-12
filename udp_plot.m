@@ -5,13 +5,12 @@ clear
 localIP = strtrim(erase(localIP, "IP Address: "))
 
 u = udpport("byte", "LocalHost", localIP, "LocalPort", 20001);
+log = []
 
 while true
-% for i = 1:1:10
     if u.NumBytesAvailable > 0
         fprintf('Data received\n');
-        u.NumBytesAvailable
-        data = read(u, u.NumBytesAvailable, "single");
-        data = reshape(data, [], 19);
+        rawdata = read(u, u.NumBytesAvailable, "single");
+        log = [log, reshape(rawdata, [], 19)];
     end
 end
