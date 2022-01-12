@@ -29,9 +29,10 @@ while(True):
 
     clientMsg = f"Message from Client: {message.hex()}"
     print(clientMsg, len(clientMsg)//2)
-    (or_x, or_y, or_z, gyro_x, gyro_y, gyro_z, acc_x, acc_y, acc_z, mag_x, mag_y, mag_z, lat, long, alt, temp, lux, pressure) = struct.unpack("ffffffffffffffffff", message)
+    (timestamp, or_x, or_y, or_z, gyro_x, gyro_y, gyro_z, acc_x, acc_y, acc_z, mag_x, mag_y, mag_z, lat, long, alt, temp, lux, pressure) = struct.unpack("fffffffffffffffffff", message)
     
     print(f"""
+    timestamp = {timestamp}
     orientation = {or_x}, {or_y}, {or_z}
     gyro = {gyro_x}, {gyro_y}, {gyro_z}
     acc = {acc_x}, {acc_y}, {acc_z}
