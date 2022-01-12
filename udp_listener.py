@@ -7,7 +7,7 @@ from dash import html
 import plotly
 from dash.dependencies import Input, Output
 from collections import deque
-
+import plotly.graph_objs as go
 
 @dataclass
 class SensorData:
@@ -57,11 +57,10 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.layout = html.Div(
     html.Div([
         html.H1('Android Sensor Data'),
-        html.Div(id='live-update-text'),
-        dcc.Graph(id='live-update-graph', animate = True),
+        dcc.Graph(id='live-update-graph', animate = False),
         dcc.Interval(
             id='interval-component',
-            interval = 50, # in milliseconds
+            interval = 500, # in milliseconds
             n_intervals=0
         )
     ])
@@ -97,36 +96,20 @@ def update_graph_live(n):
     pressure = {pressure}
     """)
 
-    # Create the graph with subplots
-    fig = plotly.tools.make_subplots(rows=3, cols=1, vertical_spacing=0.2)
-    fig['layout']['margin'] = {
-        'l': 30, 'r': 10, 'b': 30, 't': 10
-    }
-    fig['layout']['legend'] = {'x': 0, 'y': 1, 'xanchor': 'left'}
+    
 
-    fig.append_trace({
-        'x': list(t),
-        'y': list(y1),
-        'name': 'X-Acceleration',
-        'mode': 'lines+markers',
-        'type': 'scatter'
-    }, 1, 1)
-    fig.append_trace({
-        'x': list(t),
-        'y': list(y2),
-        'name': 'Y-Acceleration',
-        'mode': 'lines+markers',
-        'type': 'scatter'
-    }, 1, 1)
-    fig.append_trace({
-        'x': list(t),
-        'y': list(y3),
-        'name': 'Z-Acceleration',
-        'mode': 'lines+markers',
-        'type': 'scatter'
-    }, 1, 1)
+    data = plotly.graph_objs.Scatter(
+            x=list(t),
+            y=list(y1),
+            name='Scatter',
+            mode= 'lines+markers'
+    )
 
-    return fig
+    return {'data': [data],
+            'layout' : go.Layout(xaxis=dict(
+                    range=[min(t),max(t)]),yaxis = 
+                    dict(range = [min(y1),max(y1)]),
+                    )}
 
 if __name__ == '__main__':
     app.run_server(debug=True)
