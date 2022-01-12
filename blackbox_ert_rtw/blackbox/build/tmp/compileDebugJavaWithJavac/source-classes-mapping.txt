@@ -1,0 +1,14 @@
+com/shreybohra/blackbox/InfoFragment.java
+ com.shreybohra.blackbox.InfoFragment
+com/shreybohra/blackbox/GPSHandler.java
+ com.shreybohra.blackbox.GPSHandler
+com/shreybohra/blackbox/OnFragmentInteractionListener.java
+ com.shreybohra.blackbox.OnFragmentInteractionListener
+com/shreybohra/blackbox/blackbox.java
+ com.shreybohra.blackbox.blackbox
+ com.shreybohra.blackbox.blackbox$1
+ com.shreybohra.blackbox.blackbox$2
+com/shreybohra/blackbox/BuildConfig.java
+ com.shreybohra.blackbox.BuildConfig
+com/shreybohra/blackbox/SectionsPagerAdapter.java
+ com.shreybohra.blackbox.SectionsPagerAdapter
