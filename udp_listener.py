@@ -1,17 +1,38 @@
 import socket
 import struct
+from dataclasses import dataclass
+
+@dataclass
+class SensorData:
+
+    timestamp: float = 0.0
+    or_x: float = 0.0
+    or_y: float = 0.0
+    or_z: float = 0.0
+    gyro_x: float = 0.0
+    gyro_y: float = 0.0
+    gyro_z: float = 0.0
+    acc_x: float = 0.0
+    acc_y: float = 0.0
+    acc_z: float = 0.0
+    mag_x: float = 0.0
+    mag_y: float = 0.0
+    mag_z: float = 0.0
+    lat: float = 0.0
+    long: float = 0.0
+    alt: float = 0.0
+    temp: float = 0.0
+    lux: float = 0.0
+    pressure: float = 0.0
+
+data = SensorData()
 
 hostname = socket.gethostname()
 localIP = socket.gethostbyname(hostname)
 localPort   = 20001
-
 bufferSize  = 1024
 
-# msgFromServer       = "Hello UDP Client"
-# bytesToSend         = str.encode(msgFromServer) 
-
 # Create a datagram socket
-
 UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
 # Bind to address and ip
@@ -19,16 +40,15 @@ UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 UDPServerSocket.bind((localIP, localPort))
 print("UDP server up and listening on ", localIP) 
 
-# Listen for incoming datagrams
 
 while(True):
+
     bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
-
     message = bytesAddressPair[0]
-    address = bytesAddressPair[1]
+    # address = bytesAddressPair[1]
 
-    clientMsg = f"Message from Client: {message.hex()}"
-    print(clientMsg, len(clientMsg)//2)
+    # clientMsg = f"Message from Client: {message.hex()}"
+    # print(clientMsg, len(clientMsg)//2)
     (timestamp, or_x, or_y, or_z, gyro_x, gyro_y, gyro_z, acc_x, acc_y, acc_z, mag_x, mag_y, mag_z, lat, long, alt, temp, lux, pressure) = struct.unpack("fffffffffffffffffff", message)
     
     print(f"""
@@ -42,10 +62,6 @@ while(True):
     lux = {lux}
     pressure = {pressure}
     """)
-    # clientIP  = "Client IP Address:{}".format(address)
-    # print(clientIP) 
-
-    # Sending a reply to client
-
-    # UDPServerSocket.sendto(bytesToSend, address)
+ 
+    # Simulink generated app sends an empty packet after data packet - need to discard
     UDPServerSocket.recvfrom(bufferSize)
