@@ -38,8 +38,7 @@ while true
 %         u.NumBytesAvailable
         rawdata = read(u, 20, "single");
 %         fprintf('Data received\n');
-        framed = separate(rawdata, datalen);
-        log = [log; framed];
+        log = [log; rawdata];
         i = i+1;
         addpoints(y1, rawdata(1), rawdata(8));
         addpoints(y2, rawdata(1), rawdata(9));
@@ -51,15 +50,3 @@ while true
 end
 % toc
 % profile viewer
-
-function new = separate(raw, cols)
-    rows = length(raw)/cols;
-%     fprintf('%i rows, %i cols', rows, cols)
-    new = zeros(rows, cols);
-    
-    for i = 1:1:rows
-        for j = 1:1:cols
-            new(i, j) = raw(((i-1)*cols)+j);
-        end        
-    end    
-end
