@@ -38,8 +38,8 @@ while true
 %         u.NumBytesAvailable
         rawdata = read(u, 20, "single");
 %         fprintf('Data received\n');
-        log = [log; rawdata];
-        i = i+1;
+%         log = [log; rawdata];
+        fprintf('t = %.2f\n', rawdata(1));
         addpoints(y1, rawdata(1), rawdata(8));
         addpoints(y2, rawdata(1), rawdata(9));
         addpoints(y3, rawdata(1), rawdata(10));

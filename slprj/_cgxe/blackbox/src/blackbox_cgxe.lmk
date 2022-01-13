@@ -1,0 +1,47 @@
+CC     = "C:\Program Files\MATLAB\R2021a\sys\lcc64\lcc64\bin\lcc64.exe"
+LD     = "C:\Program Files\MATLAB\R2021a\sys\lcc64\lcc64\bin\lcclnk64.exe"
+LIBCMD = "C:\Program Files\MATLAB\R2021a\sys\lcc64\lcc64\bin\lcclib64.exe"
+CFLAGS = -w -dll -noregistrylookup  -c -Zp8 -DLCC_WIN64 -DMATLAB_MEX_FILE -nodeclspec  
+LDFLAGS = -s -dll -L"C:\Program Files\MATLAB\R2021a\sys\lcc64\lcc64\lib64" -entry LibMain -map sfun.map 
+LIBFLAGS = 
+
+OBJECTS = \
+	"c_mexapi_version.obj"\
+	"lccstub.obj"\
+	"blackbox_cgxe.obj"\
+	"m_vPQnrEvXbKz2rGpHnRdrkD.obj"\
+	"m_TTLCUDajK4f7O0CW8HSrh.obj"\
+	"blackbox_cgxe_registry.obj"\
+	"blackbox_cgxe.def"\
+	"C:\Program Files\MATLAB\R2021a\extern\lib\win64\microsoft\libmx.lib"\
+	"C:\Program Files\MATLAB\R2021a\extern\lib\win64\microsoft\libmex.lib"\
+	"C:\Program Files\MATLAB\R2021a\extern\lib\win64\microsoft\libmat.lib"\
+	"C:\Program Files\MATLAB\R2021a\extern\lib\win64\microsoft\libfixedpoint.lib"\
+	"C:\Program Files\MATLAB\R2021a\extern\lib\win64\microsoft\libut.lib"\
+	"C:\Program Files\MATLAB\R2021a\extern\lib\win64\microsoft\libmwmathutil.lib"\
+	"C:\Program Files\MATLAB\R2021a\extern\lib\win64\microsoft\libemlrt.lib"\
+	"C:\Program Files\MATLAB\R2021a\extern\lib\win64\microsoft\libmwcgxert.lib"\
+	"C:\Program Files\MATLAB\R2021a\extern\lib\win64\microsoft\libmwcgxeooprt.lib"\
+	"C:\Program Files\MATLAB\R2021a\extern\lib\win64\microsoft\libmwslexec_simbridge.lib"\
+	"C:\Program Files\MATLAB\R2021a\extern\lib\win64\microsoft\libmwslccrt.lib"\
+	"C:\Program Files\MATLAB\R2021a\lib\win64\libmwipp.lib"\
+	"C:\Program Files\MATLAB\R2021a\extern\lib\win64\microsoft\libcovrt.lib"\
+	"C:\Program Files\MATLAB\R2021a\extern\lib\win64\microsoft\libmwsl_sfcn_cov_bridge.lib"\
+
+INCLUDE_PATH= -I"C:\Program Files\MATLAB\R2021a\extern\include"  -I"C:\Program Files\MATLAB\R2021a\simulink\include"  -I"C:\Program Files\MATLAB\R2021a\rtw\c\src"  -I"C:\Users\shrey\Desktop\blackbox"  -I"C:\Users\shrey\Desktop\blackbox\slprj\_cprj"  -I"C:\Program Files\MATLAB\R2021a\sys\lcc64\lcc64\include64"  -I"C:\Users\shrey\Desktop\blackbox\slprj\_cgxe\blackbox\src" 
+ 
+
+blackbox_cgxe.mexw64 : $(MAKEFILE) $(OBJECTS)
+	$(LD) $(LDFLAGS) -o blackbox_cgxe.mexw64 @blackbox_cgxe.lmko
+c_mexapi_version.obj :	"C:\Program Files\MATLAB\R2021a\extern\version\c_mexapi_version.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "C:\Program Files\MATLAB\R2021a\extern\version\c_mexapi_version.c"
+lccstub.obj :	"C:\Program Files\MATLAB\R2021a\sys\lcc64\lcc64\mex\lccstub.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "C:\Program Files\MATLAB\R2021a\sys\lcc64\lcc64\mex\lccstub.c"
+blackbox_cgxe.obj :	"blackbox_cgxe.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "blackbox_cgxe.c"
+m_vPQnrEvXbKz2rGpHnRdrkD.obj :	"m_vPQnrEvXbKz2rGpHnRdrkD.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "m_vPQnrEvXbKz2rGpHnRdrkD.c"
+m_TTLCUDajK4f7O0CW8HSrh.obj :	"m_TTLCUDajK4f7O0CW8HSrh.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "m_TTLCUDajK4f7O0CW8HSrh.c"
+blackbox_cgxe_registry.obj :	"blackbox_cgxe_registry.c"
+	$(CC) $(CFLAGS) $(INCLUDE_PATH) "blackbox_cgxe_registry.c"

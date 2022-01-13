@@ -8,7 +8,10 @@ com/shreybohra/blackbox/blackbox.java
  com.shreybohra.blackbox.blackbox
  com.shreybohra.blackbox.blackbox$1
  com.shreybohra.blackbox.blackbox$2
+ com.shreybohra.blackbox.blackbox$3
 com/shreybohra/blackbox/BuildConfig.java
  com.shreybohra.blackbox.BuildConfig
+com/shreybohra/blackbox/AppFragment.java
+ com.shreybohra.blackbox.AppFragment
 com/shreybohra/blackbox/SectionsPagerAdapter.java
  com.shreybohra.blackbox.SectionsPagerAdapter

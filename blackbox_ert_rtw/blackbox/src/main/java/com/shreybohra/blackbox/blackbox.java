@@ -19,12 +19,15 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.widget.TextView;
+import java.util.Hashtable;
 
 public class blackbox extends AppCompatActivity implements SensorEventListener, OnFragmentInteractionListener {
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
     private InfoFragment infoFragment = null;
+     private Hashtable<Integer,TextView> textViews = new Hashtable<Integer,TextView>();
      private float mLightData = 0.0f;
      private float[] mGyroscopeData = { 0.0f, 0.0f, 0.0f };
      private float[] mAccelerometerData = { 0.0f, 0.0f, 0.0f };
@@ -154,6 +157,9 @@ private final float[] mOrientationAngles = new float[3];
             infoFragment.setFragmentInteractionListener(this);
             requestPermission();
         }
+        if (fragment instanceof AppFragment) {
+            ((AppFragment)fragment).setFragmentInteractionListener(this);
+        }
     }
 
 	@Override
@@ -165,6 +171,9 @@ private final float[] mOrientationAngles = new float[3];
     public void onFragmentStart(String name) {
         switch (name) {
             case "Info":
+               break;
+            case "App":
+                registerDataDisplays();
                 break;
             default:
                 break;
@@ -174,6 +183,8 @@ private final float[] mOrientationAngles = new float[3];
     @Override
     public void onFragmentResume(String name) {
         switch (name) {
+            case "App":
+                break;
             case "Info":
                 if (checkIfAllPermissionsGranted()){
                     if (!BgThread.isAlive()) {
@@ -236,6 +247,14 @@ private final float[] mOrientationAngles = new float[3];
         }
     }
 
+    public void registerDataDisplays() {
+    // bind text views for data display block;
+    for (int i = 1; i <= 1; i++) {
+            TextView textView = (TextView) findViewById(
+            getResources().getIdentifier("DataDisplay" + i, "id", getPackageName()));
+            textViews.put(i, textView);
+        }
+    }
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
@@ -313,6 +332,78 @@ private final float[] mOrientationAngles = new float[3];
         return mGPSHandler.getLocationData();
     }
 
+    public void displayText(int id, byte[] data, byte[] format) {
+        String formatString = new String(format);
+        String toDisplay = String.format(formatString, data[0]);
+        if (data.length > 1) {
+            for (int i = 1; i < data.length; i++)
+                toDisplay += "\n" + String.format(formatString, data[i]);
+        }
+        updateTextViewById(id, toDisplay);
+    }
+
+    public void displayText(int id, short[] data, byte[] format) {
+        String formatString = new String(format);
+        String toDisplay = String.format(formatString, data[0]);
+        if (data.length > 1) {
+            for (int i = 1; i < data.length; i++)
+                toDisplay += "\n" + String.format(formatString, data[i]);
+        }
+        updateTextViewById(id, toDisplay);
+    }
+
+    public void displayText(int id, int[] data, byte[] format) {
+        String formatString = new String(format);
+        String toDisplay = String.format(formatString, data[0]);
+        if (data.length > 1) {
+            for (int i = 1; i < data.length; i++)
+                toDisplay += "\n" + String.format(formatString, data[i]);
+        }
+        updateTextViewById(id, toDisplay);
+    }
+
+    public void displayText(int id, long[] data, byte[] format) {
+        String formatString = new String(format);
+        String toDisplay = String.format(formatString, data[0]);
+        if (data.length > 1) {
+            for (int i = 1; i < data.length; i++)
+                toDisplay += "\n" + String.format(formatString, data[i]);
+        }
+        updateTextViewById(id, toDisplay);
+    }
+
+    public void displayText(int id, float[] data, byte[] format) {
+        String formatString = new String(format);
+        String toDisplay = String.format(formatString, data[0]);
+        if (data.length > 1) {
+            for (int i = 1; i < data.length; i++)
+                toDisplay += "\n" + String.format(formatString, data[i]);
+        }
+        updateTextViewById(id, toDisplay);
+    }
+
+    public void displayText(int id, double[] data, byte[] format) {
+        String formatString = new String(format);
+        String toDisplay = String.format(formatString, data[0]);
+        if (data.length > 1) {
+            for (int i = 1; i < data.length; i++)
+                toDisplay += "\n" + String.format(formatString, data[i]);
+        }
+        updateTextViewById(id, toDisplay);
+    }
+
+    private void updateTextViewById(final int id, final String finalStringToDisplay) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    textViews.get(id).setText(finalStringToDisplay);
+                } catch (Exception ex) {
+                    Log.e("blackbox.updateTextViewById", ex.getLocalizedMessage());
+                }
+            }
+        });
+    }
     private native int naMain(String[] argv, blackbox pThis);
     private native void naOnAppStateChange(int state);
     static {

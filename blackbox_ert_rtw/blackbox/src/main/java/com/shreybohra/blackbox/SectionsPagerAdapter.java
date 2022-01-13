@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-  private static final int NUMTABS = 1;
+  private static final int NUMTABS = 2;
    public static int getNumTabs() { return NUMTABS; }
 
     public SectionsPagerAdapter(FragmentManager fm) {
@@ -17,7 +17,9 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
    @Override
     public Fragment getItem(int position) {
         switch (position) {
-			case 0:  return InfoFragment.newInstance();
+			case 0:  return AppFragment.newInstance();
+
+			case 1:  return InfoFragment.newInstance();
 
 			default: return null;
 		}
@@ -30,7 +32,9 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
 
-			case 0:  return "Info";
+			case 0:  return "App";
+
+			case 1:  return "Info";
 
 			default: return null;
 		}

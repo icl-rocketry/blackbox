@@ -20,6 +20,10 @@
         "source": "C:\\Users\\shrey\\Desktop\\blackbox\\blackbox_ert_rtw\\blackbox\\src\\main\\res\\drawable\\expand.png"
     },
     {
+        "merged": "C:\\Users\\shrey\\Desktop\\blackbox\\blackbox_ert_rtw\\blackbox\\build\\intermediates\\res\\merged\\debug\\layout_auto_generated_widgets.xml.flat",
+        "source": "C:\\Users\\shrey\\Desktop\\blackbox\\blackbox_ert_rtw\\blackbox\\src\\main\\res\\layout\\auto_generated_widgets.xml"
+    },
+    {
         "merged": "C:\\Users\\shrey\\Desktop\\blackbox\\blackbox_ert_rtw\\blackbox\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_ic_launcher.png.flat",
         "source": "C:\\Users\\shrey\\Desktop\\blackbox\\blackbox_ert_rtw\\blackbox\\src\\main\\res\\drawable-hdpi\\ic_launcher.png"
     },
@@ -50,5 +54,9 @@
     {
         "merged": "C:\\Users\\shrey\\Desktop\\blackbox\\blackbox_ert_rtw\\blackbox\\build\\intermediates\\res\\merged\\debug\\drawable_tab_selector.xml.flat",
         "source": "C:\\Users\\shrey\\Desktop\\blackbox\\blackbox_ert_rtw\\blackbox\\src\\main\\res\\drawable\\tab_selector.xml"
+    },
+    {
+        "merged": "C:\\Users\\shrey\\Desktop\\blackbox\\blackbox_ert_rtw\\blackbox\\build\\intermediates\\res\\merged\\debug\\layout_fragment_app.xml.flat",
+        "source": "C:\\Users\\shrey\\Desktop\\blackbox\\blackbox_ert_rtw\\blackbox\\src\\main\\res\\layout\\fragment_app.xml"
     }
 ]

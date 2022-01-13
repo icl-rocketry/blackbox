@@ -1034,6 +1034,8 @@ drawable tooltip_frame_dark
 drawable tooltip_frame_light
 id ALT
 id CTRL
+id DataDisplay1
+id DataDisplayLabel1
 id FUNCTION
 id InfoTab_Device
 id InfoTab_Model
@@ -1066,6 +1068,7 @@ id all
 id always
 id async
 id auto
+id auto_generated_widgets
 id beginning
 id blocking
 id bold
@@ -1277,6 +1280,7 @@ layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_main
+layout auto_generated_widgets
 layout design_bottom_navigation_item
 layout design_bottom_sheet_dialog
 layout design_layout_snackbar
@@ -1291,6 +1295,7 @@ layout design_navigation_item_subheader
 layout design_navigation_menu
 layout design_navigation_menu_item
 layout design_text_input_password_icon
+layout fragment_app
 layout fragment_info
 layout fragment_log
 layout mtrl_layout_snackbar
