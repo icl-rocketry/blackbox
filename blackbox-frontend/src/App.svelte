@@ -1,12 +1,20 @@
 <script lang="ts">
-  $: counter = 0;
 </script>
 
 <main>
-  <div class="bg-red-500">
-    Count: {counter}
+  <div class="bg-slate-900 min-h-screen flex items-center justify-center">
+    <div class="grid grid-cols-4 gap-2 min-h-screen min-w-full">
+      <div class="p-1 bg-slate-800 text-white rounded-xl">1</div>
+      <div class="p-1 bg-slate-800 text-white rounded-xl">2</div>
+      <div class="p-1 bg-slate-800 text-white rounded-xl">3</div>
+      <div class="p-1 bg-slate-800 text-white rounded-xl">4</div>
+      <div class="p-1 bg-slate-800 text-white rounded-xl">5</div>
+      <div class="p-1 bg-slate-800 text-white rounded-xl row-span-2 col-span-2">6</div>
+      <div class="p-1 bg-slate-800 text-white rounded-xl">7</div>
+      <div class="p-1 bg-slate-800 text-white rounded-xl">8</div>
+      <div class="p-1 bg-slate-800 text-white rounded-xl">9</div>
+    </div>
   </div>
-  <button on:click={(_) => counter++}>Increment</button>
 </main>
 
 <style global>
