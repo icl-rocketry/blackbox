@@ -4,7 +4,7 @@
 
 <div class="bg-slate-900 min-h-screen flex items-center justify-center">
   <div class="grid grid-cols-4 gap-2 min-h-screen min-w-full">
-    <div class="bg-slate-800 text-white flex">
+    <div class="bg-slate-800 text-white flex justify-center items-center rounded-xl">
       <Chart id="top_left"/>
     </div>
 

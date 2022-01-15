@@ -1,26 +1,48 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import Chart from "chart.js";
+  import { Chart } from "chart.js";
 
   export let id: string;
 
   onMount(renderChart);
+
   function renderChart() {
-    var ctx = document.getElementById(id).getContext("2d");
-    var chart = new Chart(ctx, {
+    let ctx = document.getElementById(id);
+
+    const labels = [1, 2, 3, 4, 5, 6, 7];
+    const data = {
+      labels: labels,
+      datasets: [
+        {
+          label: "Dataset 1",
+          data: [1, 2, 3, 4, 5, 6, 7],
+          borderColor: "#FF0000",
+          backgroundColor: "transparent",
+        },
+        {
+          label: "Dataset 2",
+          data: [7, 6, 5, 4, 3, 2, 1],
+          borderColor: "#0000FF",
+          backgroundColor: "transparent",
+        },
+      ],
+    };
+
+    const config = {
       type: "line",
-      data: {
-        labels: ["January", "February", "March", "April", "May", "June", "July", "August"],
-        datasets: [
-          {
-            label: "My First dataset",
-            borderColor: "rgb(255, 99, 132)",
-            data: [0, 10, 5, 2, 20, 30, 45, 80]
-          }
-        ]
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: "bottom",
+          },
+        },
       },
-      options: {}
-    });
+    };
+
+    new Chart(ctx as any, config as any);
   }
 </script>
-<canvas id={id} class="object-cover max-h-full max-w-full"></canvas>
+
+<canvas {id} class="object-cover max-h-full max-w-full" />
