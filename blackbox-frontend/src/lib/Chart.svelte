@@ -7,15 +7,17 @@
     }[];
   };
 
+  //This is an implementation of Svelte stores
   export interface LineChart {
+    subscribe(callback: (data: ChartData) => void): void;
+    set(v: ChartData): void;
     add(values: number[]): void;
-    getData(): ChartData;
   }
 
   export class RollingWindowChart implements LineChart {
-
-    private readonly data: ChartData;
+    private data: ChartData;
     private maxSize: number;
+    private readonly subscribers = [];
 
     constructor(maxSize: number, lines: { label: string; colour: string }[]) {
       this.maxSize = maxSize;
@@ -28,6 +30,16 @@
       };
     }
 
+    public subscribe(callback: (data: ChartData) => void): () => void {
+      const last = this.subscribers.length;
+      this.subscribers.push(callback);
+      callback(this.data);
+
+      return () => {
+        this.subscribers.splice(last, 1);
+      };
+    }
+
     public add(values: number[]): void {
       for (let i = 0; i < this.data.datasets.length; i++) {
         const dataset = this.data.datasets[i];
@@ -37,10 +49,12 @@
           dataset.data.shift();
         }
       }
+      this.set(this.data); //Reuse later set function for "niceness"
     }
 
-    public getData(): ChartData {
-      return this.data;
+    public set(v: ChartData): void {
+      this.data = v;
+      this.subscribers.forEach((fn) => fn(this.data));
     }
   }
 </script>
@@ -52,7 +66,7 @@
   Chart.register(...registerables);
 
   export let id: string;
-  export let data: LineChart;
+  export let data: ChartData;
   export let title = "Title";
   export const xMax: number = 100;
   export const xMin: number = 0;
@@ -66,7 +80,7 @@
 
     const chart_data = {
       labels: Array.from(Array(xMax - xMin)).map((_, i) => i + xMin),
-      datasets: data.getData().datasets.map(({ label, data, borderColor }) => ({
+      datasets: data.datasets.map(({ label, data, borderColor }) => ({
         label,
         data,
         borderColor,
@@ -122,9 +136,9 @@
   });
   afterUpdate(() => {
     const chart_data = chart.data;
-    if (data.getData().datasets.length > 0) {
+    if (data.datasets.length > 0) {
       chart_data.datasets.forEach((dataset: { data: any[] }, index: number) => {
-        dataset.data = data.getData().datasets[index].data;
+        dataset.data = data.datasets[index].data;
       });
 
       chart.update();

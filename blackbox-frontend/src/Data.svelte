@@ -31,7 +31,6 @@
 
   setInterval(() => {
     data.add([Math.random() * 10]);
-    data = data;
   }, 50);
 </script>
 
@@ -40,28 +39,28 @@
     <div
       class="bg-slate-800 text-white flex justify-center items-center rounded-xl"
     >
-      <Chart id="top_left" {data} title="Acceleration" />
+      <Chart id="top_left" bind:data={$data} title="Acceleration" />
     </div>
 
     <div
       class="bg-slate-800 text-white flex justify-center items-center rounded-xl"
     >
-      <Chart id="1" data={d2} />
+      <Chart id="1" bind:data={$d2} />
     </div>
     <div
       class="bg-slate-800 text-white flex justify-center items-center rounded-xl"
     >
-      <Chart id="2" data={d2} />
+      <Chart id="2" bind:data={$d2} />
     </div>
     <div
       class="bg-slate-800 text-white flex justify-center items-center rounded-xl"
     >
-      <Chart id="3" data={d2} />
+      <Chart id="3" bind:data={$d2} />
     </div>
     <div
       class="bg-slate-800 text-white flex justify-center items-center rounded-xl"
     >
-      <Chart id="4" data={d2} />
+      <Chart id="4" bind:data={$d2} />
     </div>
     <div
       class="bg-slate-800 text-white rounded-xl row-span-2 col-span-2 min-h-full"
@@ -71,17 +70,17 @@
     <div
       class="bg-slate-800 text-white flex justify-center items-center rounded-xl"
     >
-      <Chart id="5" data={d2} />
+      <Chart id="5" bind:data={$d2} />
     </div>
     <div
       class="bg-slate-800 text-white flex justify-center items-center rounded-xl"
     >
-      <Chart id="6" data={d2} />
+      <Chart id="6" bind:data={$d2} />
     </div>
     <div
       class="bg-slate-800 text-white flex justify-center items-center rounded-xl"
     >
-      <Chart id="7" data={d2} />
+      <Chart id="7" bind:data={$d2} />
     </div>
   </div>
 </div>
