@@ -7,28 +7,13 @@
     }[];
   };
 
-  //This is an implementation of Svelte stores
-  export interface LineChart {
-    subscribe(callback: (data: ChartData) => void): void;
-    set(v: ChartData): void;
-    add(values: number[]): void;
-  }
+  //LineChart is an abstract class that manages the data of a line chart.
+  //It is also a Svelte store
+  abstract class LineChart {
+    protected data: ChartData;
+    private readonly subscribers: ((data: ChartData) => void)[] = [];
 
-  export class RollingWindowChart implements LineChart {
-    private data: ChartData;
-    private maxSize: number;
-    private readonly subscribers = [];
-
-    constructor(maxSize: number, lines: { label: string; colour: string }[]) {
-      this.maxSize = maxSize;
-      this.data = {
-        datasets: lines.map((line) => ({
-          label: line.label,
-          data: [],
-          borderColor: line.colour,
-        })),
-      };
-    }
+    abstract add(...values: number[]): void;
 
     public subscribe(callback: (data: ChartData) => void): () => void {
       const last = this.subscribers.length;
@@ -40,7 +25,28 @@
       };
     }
 
-    public add(values: number[]): void {
+    public set(v: ChartData): void {
+      this.data = v;
+      this.subscribers.forEach((fn) => fn(this.data));
+    }
+  }
+
+  export class RollingWindowChart extends LineChart {
+    private maxSize: number;
+
+    constructor(maxSize: number, lines: { label: string; colour: string }[]) {
+      super();
+      this.maxSize = maxSize;
+      this.data = {
+        datasets: lines.map((line) => ({
+          label: line.label,
+          data: [],
+          borderColor: line.colour,
+        })),
+      };
+    }
+
+    public add(...values: number[]): void {
       for (let i = 0; i < this.data.datasets.length; i++) {
         const dataset = this.data.datasets[i];
 
@@ -49,12 +55,7 @@
           dataset.data.shift();
         }
       }
-      this.set(this.data); //Reuse later set function for "niceness"
-    }
-
-    public set(v: ChartData): void {
-      this.data = v;
-      this.subscribers.forEach((fn) => fn(this.data));
+      this.set(this.data);
     }
   }
 </script>

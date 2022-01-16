@@ -1,6 +1,5 @@
 <script lang="ts">
   import Chart from "./lib/Chart.svelte";
-  import type { ChartData, LineChart } from "./lib/Chart.svelte";
   import { RollingWindowChart } from "./lib/Chart.svelte";
 
   const labels = [];
@@ -13,7 +12,7 @@
 
   let data = new RollingWindowChart(100, [
     {
-      label: "Dataset 1",
+      label: "X",
       colour: "#FF0000",
     },
   ]);
@@ -30,7 +29,7 @@
   ])
 
   setInterval(() => {
-    data.add([Math.random() * 10]);
+    data.add(Math.random() * 10);
   }, 50);
 </script>
 
