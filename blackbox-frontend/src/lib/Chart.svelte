@@ -13,10 +13,12 @@
   }
 
   export class RollingWindowChart implements LineChart {
+
+    private readonly data: ChartData;
+    private maxSize: number;
+
     constructor(maxSize: number, lines: { label: string; colour: string }[]) {
-      //@ts-ignore
       this.maxSize = maxSize;
-      //@ts-ignore
       this.data = {
         datasets: lines.map((line) => ({
           label: line.label,
@@ -26,15 +28,11 @@
       };
     }
 
-
     public add(values: number[]): void {
-      //@ts-ignore
       for (let i = 0; i < this.data.datasets.length; i++) {
-        //@ts-ignore
         const dataset = this.data.datasets[i];
 
         dataset.data.push(values[i]);
-        //@ts-ignore
         if (dataset.data.length > this.maxSize) {
           dataset.data.shift();
         }
@@ -42,7 +40,6 @@
     }
 
     public getData(): ChartData {
-      //@ts-ignore
       return this.data;
     }
   }
