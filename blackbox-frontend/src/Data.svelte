@@ -2,14 +2,6 @@
   import Chart from "./lib/Chart.svelte";
   import { RollingWindowChart } from "./lib/Chart.svelte";
 
-  const labels = [];
-  const x = [];
-  const n = 100;
-  for (let i = 0; i < n; i++) {
-    labels.push(i);
-    x.push(Math.random() * 10);
-  }
-
   let data = new RollingWindowChart(100, [
     {
       label: "X",

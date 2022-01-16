@@ -47,6 +47,11 @@
     }
 
     public add(...values: number[]): void {
+      if (this.data.datasets.length !== values.length) {
+        throw new Error(
+          `RollingWindowChart: number of values (${values.length}) does not match number of lines (${this.data.datasets.length})`
+        );
+      }
       for (let i = 0; i < this.data.datasets.length; i++) {
         const dataset = this.data.datasets[i];
 
