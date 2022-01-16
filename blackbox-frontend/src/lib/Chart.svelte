@@ -6,17 +6,56 @@
       borderColor: string;
     }[];
   };
+
+  export interface LineChart {
+    add(values: number[]): void;
+    getData(): ChartData;
+  }
+
+  export class RollingWindowChart implements LineChart {
+    constructor(maxSize: number, lines: { label: string; colour: string }[]) {
+      //@ts-ignore
+      this.maxSize = maxSize;
+      //@ts-ignore
+      this.data = {
+        datasets: lines.map((line) => ({
+          label: line.label,
+          data: [],
+          borderColor: line.colour,
+        })),
+      };
+    }
+
+
+    public add(values: number[]): void {
+      //@ts-ignore
+      for (let i = 0; i < this.data.datasets.length; i++) {
+        //@ts-ignore
+        const dataset = this.data.datasets[i];
+
+        dataset.data.push(values[i]);
+        //@ts-ignore
+        if (dataset.data.length > this.maxSize) {
+          dataset.data.shift();
+        }
+      }
+    }
+
+    public getData(): ChartData {
+      //@ts-ignore
+      return this.data;
+    }
+  }
 </script>
 
 <!-- svelte-ignore non-top-level-reactive-declaration -->
 <script lang="ts">
   import { afterUpdate, onMount } from "svelte";
-  import { Chart, registerables } from 'chart.js';
+  import { Chart, registerables } from "chart.js";
   Chart.register(...registerables);
 
-
   export let id: string;
-  export let data: ChartData;
+  export let data: LineChart;
   export let title = "Title";
   export const xMax: number = 100;
   export const xMin: number = 0;
@@ -29,8 +68,8 @@
     let ctx = document.getElementById(id);
 
     const chart_data = {
-      labels: Array.from(Array(xMax-xMin)).map((_, i) => i + xMin),
-      datasets: data.datasets.map(({ label, data, borderColor }) => ({
+      labels: Array.from(Array(xMax - xMin)).map((_, i) => i + xMin),
+      datasets: data.getData().datasets.map(({ label, data, borderColor }) => ({
         label,
         data,
         borderColor,
@@ -73,8 +112,8 @@
           title: {
             display: true,
             text: title,
-            color: "#FFFFFF"
-          }
+            color: "#FFFFFF",
+          },
         },
       },
     };
@@ -86,9 +125,9 @@
   });
   afterUpdate(() => {
     const chart_data = chart.data;
-    if (data.datasets.length > 0) {
+    if (data.getData().datasets.length > 0) {
       chart_data.datasets.forEach((dataset: { data: any[] }, index: number) => {
-        dataset.data = data.datasets[index].data;
+        dataset.data = data.getData().datasets[index].data;
       });
 
       chart.update();

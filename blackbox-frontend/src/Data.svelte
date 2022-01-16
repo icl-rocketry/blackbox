@@ -1,6 +1,7 @@
 <script lang="ts">
   import Chart from "./lib/Chart.svelte";
-  import type { ChartData } from "./lib/Chart.svelte";
+  import type { ChartData, LineChart } from "./lib/Chart.svelte";
+  import { RollingWindowChart } from "./lib/Chart.svelte";
 
   const labels = [];
   const x = [];
@@ -10,41 +11,27 @@
     x.push(Math.random() * 10);
   }
 
-  let data: ChartData = {
-    datasets: [
-      {
+  let data = new RollingWindowChart(100, [
+    {
+      label: "Dataset 1",
+      colour: "#FF0000",
+    },
+  ]);
+
+  const d2 = new RollingWindowChart(7, [
+    {
         label: "Dataset 1",
-        data: x,
-        borderColor: "#FF0000",
-      },
-    ],
-  };
-  const d2: ChartData = {
-    datasets: [
-      {
-        label: "Dataset 1",
-        data: [1, 2, 3, 4, 5, 6, 7],
-        borderColor: "#FF0000",
+        colour: "#FF0000",
       },
       {
         label: "Dataset 2",
-        data: [7, 6, 5, 4, 3, 2, 1],
-        borderColor: "#0000FF",
+        colour: "#0000FF",
       },
-    ],
-  };
+  ])
 
   setInterval(() => {
-    data = {
-      datasets: [
-        {
-          label: data.datasets[0].label,
-          data: [...data.datasets[0].data.slice(1), Math.floor(Math.random() * 10)],
-          borderColor: data.datasets[0].borderColor,
-        },
-      ],
-    };
-
+    data.add([Math.random() * 10]);
+    data = data;
   }, 50);
 </script>
 
@@ -53,7 +40,7 @@
     <div
       class="bg-slate-800 text-white flex justify-center items-center rounded-xl"
     >
-      <Chart id="top_left" {data} title="Acceleration"/>
+      <Chart id="top_left" {data} title="Acceleration" />
     </div>
 
     <div
