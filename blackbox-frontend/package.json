@@ -22,7 +22,7 @@
     "vite": "^2.7.2"
   },
   "dependencies": {
-    "chart.js": "^2.8.0",
+    "chart.js": "^3.7.0",
     "svelte-scrollto": "^0.2.0"
   }
 }
