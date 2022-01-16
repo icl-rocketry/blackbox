@@ -3,7 +3,7 @@
     datasets: {
       label: string;
       data: number[];
-      borderColor: string;
+      colour: string;
     }[];
   };
 
@@ -41,7 +41,7 @@
         datasets: lines.map((line) => ({
           label: line.label,
           data: [],
-          borderColor: line.colour,
+          colour: line.colour,
         })),
       };
     }
@@ -49,7 +49,7 @@
     public add(...values: number[]): void {
       if (this.data.datasets.length !== values.length) {
         throw new Error(
-          `RollingWindowChart: number of values (${values.length}) does not match number of lines (${this.data.datasets.length})`
+          `RollingWindowChart: number of values (${values.length}) does not match the number of lines (${this.data.datasets.length})`
         );
       }
       for (let i = 0; i < this.data.datasets.length; i++) {
@@ -60,6 +60,40 @@
           dataset.data.shift();
         }
       }
+      this.set(this.data);
+    }
+  }
+
+  export class SimulatedChart extends LineChart {
+
+    constructor(name: string, colour: string, simulated_data: number[]) {
+      super();
+      this.data = {
+        datasets: [
+          {
+            label: name,
+            data: [],
+            colour: colour,
+          },
+          {
+            label: "Simulated",
+            data: simulated_data,
+            colour: "#FFFFFF",
+          },
+        ],
+      };
+    }
+
+    public add(...values: number[]): void {
+      if (values.length !== 1) {
+        throw new Error(
+          `SimulatedChart: number of values (${values.length}) is not 1`
+        );
+      }
+      if (this.data.datasets[0].data.length === this.data.datasets[1].data.length) {
+        console.warn("SimulatedChart: data is being added but the simulation is complete");
+      }
+      this.data.datasets[0].data.push(values[0]);
       this.set(this.data);
     }
   }
@@ -74,10 +108,10 @@
   export let id: string;
   export let data: ChartData;
   export let title = "Title";
-  export const xMax: number = 100;
-  export const xMin: number = 0;
-  export const yMax: number = 10;
-  export const yMin: number = -10;
+  export let xMax: number = 100;
+  export let xMin: number = 0;
+  export let yMax: number = 10;
+  export let yMin: number = -10;
 
   let chart: Chart;
 
@@ -86,7 +120,7 @@
 
     const chart_data = {
       labels: Array.from(Array(xMax - xMin)).map((_, i) => i + xMin),
-      datasets: data.datasets.map(({ label, data, borderColor }) => ({
+      datasets: data.datasets.map(({ label, data, colour: borderColor }) => ({
         label,
         data,
         borderColor,

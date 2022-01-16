@@ -1,13 +1,15 @@
 <script lang="ts">
-  import Chart from "./lib/Chart.svelte";
+  import Chart, { SimulatedChart } from "./lib/Chart.svelte";
   import { RollingWindowChart } from "./lib/Chart.svelte";
 
-  let data = new RollingWindowChart(100, [
+  const data = new RollingWindowChart(100, [
     {
       label: "X",
       colour: "#FF0000",
     },
   ]);
+
+  const simulation = new SimulatedChart("Altitude", "green", [1, 2, 3, 4, 5, 6, 7, 8, 9])
 
   const d2 = new RollingWindowChart(7, [
     {
@@ -22,6 +24,7 @@
 
   setInterval(() => {
     data.add(Math.random() * 10);
+    simulation.add(Math.random() * 10);
   }, 50);
 </script>
 
@@ -36,7 +39,7 @@
     <div
       class="bg-slate-800 text-white flex justify-center items-center rounded-xl"
     >
-      <Chart id="1" bind:data={$d2} />
+      <Chart id="1" bind:data={$simulation}/>
     </div>
     <div
       class="bg-slate-800 text-white flex justify-center items-center rounded-xl"
