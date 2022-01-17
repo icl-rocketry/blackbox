@@ -34,7 +34,7 @@
 
   setInterval(() => {
     data.add(Math.random() * 10);
-    distance.set(Math.floor(Math.random() * 10));
+    distance.update((v) => v + Math.floor(Math.random() * 100));
     simulation.add(Math.random() * 10);
   }, 50);
 </script>
