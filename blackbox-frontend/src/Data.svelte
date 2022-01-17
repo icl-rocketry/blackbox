@@ -1,8 +1,10 @@
 <script lang="ts">
   import Modal from "svelte-simple-modal";
+  import { writable } from "svelte/store";
   import Chart, { SimulatedChart } from "./lib/Chart.svelte";
   import { RollingWindowChart } from "./lib/Chart.svelte";
   import Fullscreen from "./lib/Fullscreen.svelte";
+  import Text from "./lib/Text.svelte";
 
   const data = new RollingWindowChart(100, [
     {
@@ -28,8 +30,11 @@
     },
   ]);
 
+  let distance = writable(0);
+
   setInterval(() => {
     data.add(Math.random() * 10);
+    distance.set(Math.floor(Math.random() * 10));
     simulation.add(Math.random() * 10);
   }, 50);
 </script>
@@ -58,11 +63,10 @@
       />
       <Fullscreen
         className="bg-slate-800 text-white flex justify-center items-center rounded-xl"
-        child={Chart}
+        child={Text}
         props={{
-          id: "1",
-          title: "Altitude",
-          line_chart: simulation,
+          generator: distance,
+          units: "meters",
         }}
       />
       <Fullscreen
@@ -70,8 +74,8 @@
         child={Chart}
         props={{
           id: "2",
-          title: "Dummy",
-          line_chart: d2,
+          title: "Altitude",
+          line_chart: simulation,
         }}
       />
       <Fullscreen
