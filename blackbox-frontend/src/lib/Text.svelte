@@ -4,4 +4,4 @@
   export let units: string;
 </script>
 
-<p class="text-white text-6xl font-mono">{$generator} {units}</p>
+<p class="text-white text-6xl font-mono text-center">{$generator} {units}</p>
