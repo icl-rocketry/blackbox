@@ -65,7 +65,6 @@
   }
 
   export class SimulatedChart extends LineChart {
-
     constructor(name: string, colour: string, simulated_data: number[]) {
       super();
       this.data = {
@@ -90,8 +89,12 @@
           `SimulatedChart: number of values (${values.length}) is not 1`
         );
       }
-      if (this.data.datasets[0].data.length === this.data.datasets[1].data.length) {
-        console.warn("SimulatedChart: data is being added but the simulation is complete");
+      if (
+        this.data.datasets[0].data.length === this.data.datasets[1].data.length
+      ) {
+        console.warn(
+          "SimulatedChart: data is being added but the simulation is complete"
+        );
       }
       this.data.datasets[0].data.push(values[0]);
       this.set(this.data);
@@ -101,19 +104,28 @@
 
 <!-- svelte-ignore non-top-level-reactive-declaration -->
 <script lang="ts">
-  import { afterUpdate, onMount } from "svelte";
+  import { afterUpdate, onDestroy, onMount } from "svelte";
   import { Chart, registerables } from "chart.js";
   Chart.register(...registerables);
 
   export let id: string;
-  export let data: ChartData;
+  export let line_chart: LineChart = undefined;
   export let title = "Title";
   export let xMax: number = 100;
   export let xMin: number = 0;
   export let yMax: number = 10;
   export let yMin: number = -10;
 
+  export let data: ChartData;
   let chart: Chart;
+
+  if (line_chart) {
+    onDestroy(
+      line_chart.subscribe((v) => {
+        data = v;
+      })
+    );
+  }
 
   function renderChart() {
     let ctx = document.getElementById(id);

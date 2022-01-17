@@ -1,6 +1,5 @@
 <script lang="ts">
-import Data from "./Data.svelte";
-
+  import Data from "./Data.svelte";
 </script>
 
 <main>
