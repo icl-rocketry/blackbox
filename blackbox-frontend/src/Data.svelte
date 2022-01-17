@@ -50,7 +50,7 @@
 >
   <div class="bg-slate-900 min-h-screen flex items-center justify-center">
     <div
-      class="grid grid-cols-4 gap-2 min-h-screen min-w-full overflow-y-hidden overflow-x-hidden"
+      class="grid sm:grid-cols-1 lg:grid-cols-4 gap-2 min-h-screen min-w-full overflow-y-visible"
     >
       <Fullscreen
         className="bg-slate-800 text-white flex justify-center items-center rounded-xl"
@@ -97,7 +97,7 @@
         }}
       />
       <div
-        class="bg-slate-800 text-white rounded-xl row-span-2 col-span-2 min-h-full"
+        class="bg-slate-800 text-white rounded-xl row-span-2 sm:col-span-1 lg:col-span-2 min-h-full"
       >
         6
       </div>
