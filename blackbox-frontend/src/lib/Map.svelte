@@ -22,6 +22,7 @@
         maxZoom: 20,
       }
     ).addTo(m);
+    m.locate({setView: true, watch:true});
     return m;
   }
 
