@@ -1,8 +1,7 @@
 <script lang="ts">
   import Modal from "svelte-simple-modal";
   import { writable } from "svelte/store";
-  import Chart, { SimulatedChart } from "./lib/Chart.svelte";
-  import Chart, { RollingWindowChart } from "./lib/Chart.svelte";
+  import Chart, { SimulatedChart, RollingWindowChart } from "./lib/Chart.svelte";
   import Fullscreen from "./lib/Fullscreen.svelte";
   import Map from "./lib/Map.svelte";
   import Text from "./lib/Text.svelte";
@@ -32,12 +31,14 @@
   ]);
 
   let distance = writable(0);
-  let long = 51.505;
-  let lat = -0.09;
-  setInterval(() => {
-    long += 0.01;
-    lat += 0.01;
-  }, 1000);
+  let rocket_lat = 51.5007;
+  let rocket_long = -0.1246;
+  let us_lat = rocket_lat;
+  let us_long = rocket_long - 0.01;
+  // setInterval(() => {
+  //   rocket_long += 0.01;
+  //   rocket_lat += 0.01;
+  // }, 1000);
   setInterval(() => {
     data.add(Math.random() * 10);
     distance.update((v) => v + Math.floor(Math.random() * 100));
@@ -103,9 +104,9 @@
         }}
       />
       <div
-        class="rounded-xl lg:row-span-2 sm:col-span-1 lg:col-span-2 h-full min-h-full"
+        class="rounded-xl lg:row-span-2 sm:col-span-1 lg:col-span-2 min-h-full h-96"
       >
-        <Map {long} {lat} />
+        <Map {rocket_lat} {rocket_long} {us_lat} {us_long}/>
       </div>
       <Fullscreen
         className="bg-slate-800 text-white flex justify-center items-center rounded-xl"

@@ -1,19 +1,36 @@
 <script lang="ts">
-  import * as L from "leaflet";
-  // If you're playing with this in the Svelte REPL, import the CSS using the
-  // syntax in svelte:head instead. For normal development, this is better.
+  import * as Leaflet from "leaflet";
   import "leaflet/dist/leaflet.css";
-  let map: { remove: () => void; };
-  export let long = 51.505;
-  export let lat = -0.09;
+  let map: { remove: () => void };
+  export let rocket_long: number;
+  export let rocket_lat: number;
+  export let us_long: number;
+  export let us_lat: number;
 
-  let marker = L.marker([long, lat], {});
-  $: marker.setLatLng([long, lat]);
+  function emojiIcon(emoji: string): any {
+    return Leaflet.divIcon({
+      html: `<svg xmlns="http://www.w3.org/2000/svg">
+            <text y="30" font-size="3em">${emoji}</text>
+          </svg>
+          `,
+      className: "dummy",
+    });
+  }
+  const rocket = emojiIcon("🚀")
+  const us_icon = emojiIcon("🔭")
+
+  let rocket_marker = Leaflet.marker([rocket_lat, rocket_long], {
+    icon: rocket,
+  });
+  let us_marker = Leaflet.marker([us_lat, us_long], { icon: us_icon });
+  $: us_marker.setLatLng([us_lat, us_long]);
+  $: rocket_marker.setLatLng([rocket_lat, rocket_long]);
+  
   function createMap(container: HTMLDivElement) {
-    let m = L.map(container, {
-      zoomControl: false
+    let m = Leaflet.map(container, {
+      zoomControl: false,
     }).setView([51.505, -0.09], 13);
-    L.tileLayer(
+    Leaflet.tileLayer(
       "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
       {
         attribution: `&copy;<a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>,
@@ -22,13 +39,14 @@
         maxZoom: 20,
       }
     ).addTo(m);
-    m.locate({setView: true, watch:true});
+    // m.locate({setView: true, watch:true});
     return m;
   }
 
   function mapAction(container: HTMLDivElement) {
     map = createMap(container);
-    marker.addTo(map);
+    rocket_marker.addTo(map);
+    us_marker.addTo(map);
     return {
       destroy: () => {
         map.remove();

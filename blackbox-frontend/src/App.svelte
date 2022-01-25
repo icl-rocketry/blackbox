@@ -1,6 +1,5 @@
 <script lang="ts">
   import Data from "./Data.svelte";
-  import Map from "./lib/Map.svelte";
 </script>
 
 <main>
