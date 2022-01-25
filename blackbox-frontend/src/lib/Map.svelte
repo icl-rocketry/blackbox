@@ -4,8 +4,8 @@
   let map: { remove: () => void };
   export let rocket_long: number;
   export let rocket_lat: number;
-  export let us_long: number;
-  export let us_lat: number;
+  let us_long = 0;
+  let us_lat = 0;
 
   function emojiIcon(emoji: string): any {
     return Leaflet.divIcon({
@@ -16,16 +16,17 @@
       className: "dummy",
     });
   }
-  const rocket = emojiIcon("🚀")
-  const us_icon = emojiIcon("🔭")
+  const rocket = emojiIcon("🚀");
+  const us_icon = emojiIcon("🔭");
 
   let rocket_marker = Leaflet.marker([rocket_lat, rocket_long], {
     icon: rocket,
   });
   let us_marker = Leaflet.marker([us_lat, us_long], { icon: us_icon });
+  
   $: us_marker.setLatLng([us_lat, us_long]);
   $: rocket_marker.setLatLng([rocket_lat, rocket_long]);
-  
+
   function createMap(container: HTMLDivElement) {
     let m = Leaflet.map(container, {
       zoomControl: false,
@@ -39,7 +40,11 @@
         maxZoom: 20,
       }
     ).addTo(m);
-    // m.locate({setView: true, watch:true});
+    navigator.geolocation.watchPosition(function (position) {
+        us_lat = position.coords.latitude;
+        us_long = position.coords.longitude;
+    });
+
     return m;
   }
 

@@ -35,10 +35,10 @@
   let rocket_long = -0.1246;
   let us_lat = rocket_lat;
   let us_long = rocket_long - 0.01;
-  // setInterval(() => {
-  //   rocket_long += 0.01;
-  //   rocket_lat += 0.01;
-  // }, 1000);
+  setInterval(() => {
+    rocket_long += 0.01;
+    rocket_lat += 0.01;
+  }, 1000);
   setInterval(() => {
     data.add(Math.random() * 10);
     distance.update((v) => v + Math.floor(Math.random() * 100));
@@ -106,7 +106,7 @@
       <div
         class="rounded-xl lg:row-span-2 sm:col-span-1 lg:col-span-2 min-h-full h-96"
       >
-        <Map {rocket_lat} {rocket_long} {us_lat} {us_long}/>
+        <Map {rocket_lat} {rocket_long}/>
       </div>
       <Fullscreen
         className="bg-slate-800 text-white flex justify-center items-center rounded-xl"
