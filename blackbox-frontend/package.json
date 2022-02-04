@@ -26,6 +26,7 @@
   "dependencies": {
     "chart.js": "^3.7.0",
     "leaflet": "^1.7.1",
+    "svelte-fullscreen": "^2.0.0",
     "svelte-material-icons": "^1.0.3",
     "svelte-modal": "^0.4.0",
     "svelte-preprocess-import-assets": "^0.1.5",

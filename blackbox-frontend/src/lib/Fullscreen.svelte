@@ -1,23 +1,24 @@
 <script lang="ts">
-
-  import { getContext } from "svelte";
-
-  export let className: string;
-  export let child: any;
-  export let props: svelte.JSX.IntrinsicAttributes & { [name: string]: any };
-
-  const { open } = getContext("simple-modal");
-
   function expand() {
-    open(child, props);
+    const grid = this.parentNode;
+    const items = grid.children;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i] != this) {
+        items[i].hidden = !items[i].hidden;
+      }
+    }
+    const expanded = grid.className.search("grid-cols-4") == -1;
+    if (expanded) {
+      grid.className = grid.className.replace(
+        "lg:grid-cols-1",
+        "lg:grid-cols-4"
+      );
+    } else {
+      grid.className = grid.className.replace("grid-cols-4", "grid-cols-1");
+    }
   }
 </script>
 
-<div class={className}>
-  <div
-    class="object-cover h-full min-h-full max-h-full min-w-full flex flex-1 justify-center items-center cursor-pointer"
-    on:click={expand}
-  >
-    <svelte:component this={child} {...props} />
-  </div>
+<div on:click={expand} class="cursor-pointer">
+  <slot />
 </div>
