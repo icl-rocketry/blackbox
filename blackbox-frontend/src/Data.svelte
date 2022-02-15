@@ -33,16 +33,22 @@
     },
   ]);
 
-  let distance = writable(0);
+
   let rocket_lat = 51.5007;
   let rocket_long = -0.1246;
 
+  const socket = new WebSocket("ws://localhost:5000/ws") //TODO: this will probably break when we've deployed it
+
+  socket.onmessage = (event) => {
+    const msg = JSON.parse(event.data);
+    rocket_lat = msg["Location"]["Latitude"]
+    rocket_long = msg["Location"]["Longitude"]
+    data.add(msg["Pressure"]);
+  };
+
+
+  let distance = writable(0);
   setInterval(() => {
-    rocket_long += 0.01;
-    rocket_lat += 0.01;
-  }, 1000);
-  setInterval(() => {
-    data.add(Math.random() * 10);
     distance.update((v) => v + Math.floor(Math.random() * 100));
     simulation.add(Math.random() * 10);
   }, 50);
