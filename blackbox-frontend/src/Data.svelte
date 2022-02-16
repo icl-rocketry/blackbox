@@ -8,6 +8,7 @@
   import Fullscreen from "./lib/Fullscreen.svelte";
   import Map from "./lib/Map.svelte";
   import Text from "./lib/Text.svelte";
+  import RocketViewer from "./lib/RocketViewer.svelte";
 
   const data = new RollingWindowChart(100, [
     {
@@ -37,6 +38,10 @@
   let rocket_lat = 51.5007;
   let rocket_long = -0.1246;
 
+  let x = 0;
+  let y = 0;
+  let z = 0;
+
   const socket = new WebSocket("ws://localhost:5000/ws") //TODO: this will probably break when we've deployed it
 
   socket.onmessage = (event) => {
@@ -51,6 +56,9 @@
   setInterval(() => {
     distance.update((v) => v + Math.floor(Math.random() * 100));
     simulation.add(Math.random() * 10);
+    x += (Math.random() - 0.5) * 0.1;
+    y += (Math.random() - 0.5) * 0.1;
+    z += (Math.random() - 0.5) * 0.1;
   }, 50);
 </script>
 
@@ -108,20 +116,20 @@
           <Map {rocket_lat} {rocket_long} />
         </div>
 
-      <Fullscreen>
+        <!-- Please don't ask me to fullscreen this. I'll cry -->
         <div
-          class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full"
+          class="bg-slate-800 text-white flex justify-center items-center rounded-xl min-h-full row-span-2"
         >
-          <Chart id="5" title="Dummy" bind:data={$d2} />
+          <!-- <Chart id="5" title="Dummy" bind:data={$d2} /> -->
+          <RocketViewer {x} {y} {z} />
         </div>
-      </Fullscreen>
-      <Fullscreen>
+      <!-- <Fullscreen>
         <div
           class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full"
         >
           <Chart id="6" title="Dummy" bind:data={$d2} />
         </div>
-      </Fullscreen>
+      </Fullscreen> -->
       <Fullscreen>
         <div
           class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full"
