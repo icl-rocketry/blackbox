@@ -34,7 +34,6 @@
     },
   ]);
 
-
   let rocket_lat = 51.5007;
   let rocket_long = -0.1246;
 
@@ -42,23 +41,22 @@
   let y = 0;
   let z = 0;
 
-  const socket = new WebSocket("ws://localhost:5000/ws") //TODO: this will probably break when we've deployed it
+  const socket = new WebSocket("ws://localhost:5000/ws"); //TODO: this will probably break when we've deployed it
 
   socket.onmessage = (event) => {
     const msg = JSON.parse(event.data);
-    rocket_lat = msg["Location"]["Latitude"]
-    rocket_long = msg["Location"]["Longitude"]
+    rocket_lat = msg["Location"]["Latitude"];
+    rocket_long = msg["Location"]["Longitude"];
     data.add(msg["Pressure"]);
   };
-
 
   let distance = writable(0);
   setInterval(() => {
     distance.update((v) => v + Math.floor(Math.random() * 100));
     simulation.add(Math.random() * 10);
-    x += (Math.random() - 0.5) * 0.1;
-    y += (Math.random() - 0.5) * 0.1;
-    z += (Math.random() - 0.5) * 0.1;
+    x += (Math.random() - 0.5) * 0.01;
+    y += (Math.random() - 0.5) * 0.01;
+    z += (Math.random() - 0.5) * 0.01;
   }, 50);
 </script>
 
@@ -110,31 +108,20 @@
           <Chart id="4" title="Dummy" bind:data={$d2} />
         </div>
       </Fullscreen>
-        <div
-          class="rounded-xl lg:row-span-2 sm:col-span-1 lg:col-span-2 min-h-full h-96"
-        >
-          <Map {rocket_lat} {rocket_long} />
-        </div>
+      <div
+        class="rounded-xl lg:row-span-2 sm:col-span-1 lg:col-span-2 min-h-full h-96"
+      >
+        <Map {rocket_lat} {rocket_long} />
+      </div>
 
-        <!-- Please don't ask me to fullscreen this. I'll cry -->
-        <div
-          class="bg-slate-800 text-white flex justify-center items-center rounded-xl min-h-full row-span-2"
-        >
-          <!-- <Chart id="5" title="Dummy" bind:data={$d2} /> -->
-          <RocketViewer {x} {y} {z} />
-        </div>
-      <!-- <Fullscreen>
-        <div
-          class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full"
-        >
-          <Chart id="6" title="Dummy" bind:data={$d2} />
-        </div>
-      </Fullscreen> -->
+      <Fullscreen rows={2} let:fullscreen>
+        <RocketViewer {x} {y} {z} {fullscreen}/>
+      </Fullscreen>
       <Fullscreen>
         <div
           class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full"
         >
-          <Chart id="7" title="Dummy" bind:data={$d2} />
+          <Chart id="6" title="Dummy" bind:data={$d2} />
         </div>
       </Fullscreen>
     </div>

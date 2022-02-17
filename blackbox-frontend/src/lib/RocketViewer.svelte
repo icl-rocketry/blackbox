@@ -2,66 +2,75 @@
   import { onMount } from "svelte";
 
   import * as THREE from "three";
+  import { Scene } from "three";
   import { STLLoader } from "three/examples/jsm/loaders/STLLoader";
 
   export let x: number;
   export let y: number;
   export let z: number;
-  let updatePositionFunc = (_, __, ___) => {};
+  export let fullscreen = false;
+
+  const xAxisRotationOffset = Math.PI / 8;
+  const yAxisRotationOffset = -Math.PI / 4;
+
+  let updatePositionFunc = (_: number, __: number, ___: number) => {};
+  let renderRocket = (_: THREE.Scene, __: THREE.Camera) => {};
 
   $: updatePositionFunc(x, y, z);
 
-  onMount(() => {
-    let canvas = document.getElementById("canvas");
+  let loader = new STLLoader();
 
+  loader.load("/src/assets/apex.STL", function (geometry) {
+    let material = new THREE.MeshNormalMaterial({});
+    let rocketMesh = new THREE.Mesh(geometry, material);
+    geometry.center();
+    geometry.translate(1, 0, 0); //Account for bounding box center error
+
+    renderRocket = (scene, camera) => {
+      scene.add(rocketMesh);
+      camera.lookAt(rocketMesh.position);
+    };
+
+    updatePositionFunc = function set_euler(x: number, y: number, z: number) {
+      rocketMesh.rotation.x = x + xAxisRotationOffset;
+      rocketMesh.rotation.y = y + yAxisRotationOffset;
+      rocketMesh.rotation.z = z;
+    };
+  });
+
+  async function renderOnCanvas() {
+    async function waitForCanvas(resolve, reject) {
+      let canvas = document.getElementById(
+        fullscreen ? "canvas-full" : "canvas-mini"
+      );
+      if (canvas === null || canvas === undefined) {
+        setTimeout(() => waitForCanvas(resolve, reject), 250);
+      } else {
+        resolve(canvas);
+      }
+    }
+
+    let canvas: HTMLCanvasElement = await new Promise(waitForCanvas);
     // Setup
+    let height = canvas.clientHeight;
+    let width = canvas.clientWidth;
+    let camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 10000);
     let scene = new THREE.Scene();
     scene.background = new THREE.Color(0x1e293b);
-    let cHeight = canvas.clientHeight;
-    let cWidth = canvas.clientWidth;
-    console.log(cHeight, cWidth);
-    let camera = new THREE.PerspectiveCamera(70, cWidth / cHeight, 0.1, 10000);
     let renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
 
-    renderer.setSize(cWidth, cHeight);
+    renderer.setSize(width, height);
+    let rocket = renderRocket(scene, camera);
 
-    // Resize after viewport-size-change
-    window.addEventListener("resize", function () {
-      let height = cHeight;
-      let width = cWidth;
-      renderer.setSize(width, height);
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-    });
-
-    let loader = new STLLoader();
-    loader.load(
-      "/src/assets/apex.STL",
-      function (geometry) {
-        console.log(geometry);
-        let material = new THREE.MeshNormalMaterial({});
-        let mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-        geometry.center();
-        geometry.translate(1, 0, 0); //Account for bounding box center error
-        camera.lookAt(mesh.position);
-
-        updatePositionFunc = function set_euler(x: number, y: number, z: number) {
-          mesh.rotation.x = x;
-          mesh.rotation.y = y;
-          mesh.rotation.z = z;
-        };
-      }
-    );
-
-    const axesHelper = new THREE.AxesHelper(50);
+    const axesHelper = new THREE.AxesHelper(40);
+    axesHelper.rotateX(xAxisRotationOffset);
+    axesHelper.rotateY(yAxisRotationOffset);
     scene.add(axesHelper);
 
-    // Camera positioning 
-    camera.position.x = 72 * 0.7;
-    camera.position.y = 25 * 0.7;
-    camera.position.z = 100 * 0.7;
-
+    // Camera positioning - emperical position, seems to work
+    camera.position.x = 0;
+    camera.position.y = 0;
+    camera.position.z = 90;
 
     // Draw scene
     let render = function () {
@@ -75,7 +84,20 @@
     };
 
     GameLoop();
-  });
+  }
+
+  window.renderOnCanvas = renderOnCanvas;
+  $: fullscreen, renderOnCanvas()
 </script>
 
-<canvas id="canvas" class="object-cover min-h-full min-w-full rounded-xl"/>
+{#if fullscreen}
+  <canvas
+    id="canvas-full"
+    class="object-cover min-h-full min-w-full rounded-xl row-span-2"
+  />
+{:else}
+  <canvas
+    id="canvas-mini"
+    class="object-cover min-h-full max-w-full rounded-xl row-span-2"
+  />
+{/if}
