@@ -139,7 +139,7 @@
         backgroundColor: "transparent",
         radius: 0,
         tension: 0.1,
-        borderWidth: 1,
+        borderWidth: 2,
       })),
     };
 
