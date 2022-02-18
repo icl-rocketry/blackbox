@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bytes"
+	"encoding/binary"
 	"encoding/csv"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"time"
@@ -19,6 +22,8 @@ var upgrader = websocket.Upgrader{
 		return true
 	},
 }
+
+const DATA_SIZE = 4 + 12 + 12 + 12 + 4 + 8
 
 var (
 	recording    = false
@@ -51,13 +56,46 @@ type location struct {
 }
 
 type data struct {
-	Time         int
+	Time         int32
 	Acceleration accelerometer
 	Gyroscope    gyroscope
 	Magnetometer magnetometer
 	Pressure     float32
 	Temperature  float32
 	Location     location
+}
+
+func fromBuf(buf *bytes.Buffer) data {
+	return data{
+		Time: int32(binary.BigEndian.Uint32(buf.Next(4))),
+		Acceleration: accelerometer{
+			tripleSensor: tripleSensor{
+				X: float32(binary.BigEndian.Uint32(buf.Next(4))),
+				Y: float32(binary.BigEndian.Uint32(buf.Next(4))),
+				Z: float32(binary.BigEndian.Uint32(buf.Next(4))),
+			},
+		},
+		Gyroscope: gyroscope{
+			tripleSensor: tripleSensor{
+				X: float32(binary.BigEndian.Uint32(buf.Next(4))),
+				Y: float32(binary.BigEndian.Uint32(buf.Next(4))),
+				Z: float32(binary.BigEndian.Uint32(buf.Next(4))),
+			},
+		},
+		Magnetometer: magnetometer{
+			tripleSensor: tripleSensor{
+				X: float32(binary.BigEndian.Uint32(buf.Next(4))),
+				Y: float32(binary.BigEndian.Uint32(buf.Next(4))),
+				Z: float32(binary.BigEndian.Uint32(buf.Next(4))),
+			},
+		},
+		Pressure:    float32(binary.BigEndian.Uint32(buf.Next(4))),
+		Temperature: float32(binary.BigEndian.Uint32(buf.Next(4))),
+		Location: location{
+			Latitude:  float32(binary.BigEndian.Uint32(buf.Next(4))),
+			Longitude: float32(binary.BigEndian.Uint32(buf.Next(4))),
+		},
+	}
 }
 
 func startHandler(ctx *gin.Context) {
@@ -134,6 +172,31 @@ func flush() {
 	}
 }
 
+func udpServer() {
+	pc, err := net.ListenPacket("udp", ":1053")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer pc.Close()
+
+	for {
+		buf := make([]byte, DATA_SIZE*50)
+		n, _, err := pc.ReadFrom(buf)
+		if err != nil || n < DATA_SIZE || !recording {
+			log.Panicln("Couldn't read from UDP socket because", err)
+			continue
+		}
+
+		go serve(bytes.NewBuffer(buf[:n]))
+	}
+}
+
+func serve(buf *bytes.Buffer) {
+	data := fromBuf(buf)
+	dataChannel <- data
+	recordedData = append(recordedData, data)
+}
+
 func main() {
 	r := gin.Default()
 
@@ -163,6 +226,7 @@ func main() {
 	}()
 
 	go flush()
+	go udpServer()
 
 	r.GET("/ws", dataHandler)
 	r.POST("/start", startHandler)
