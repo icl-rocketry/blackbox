@@ -20,7 +20,7 @@
 
   let loader = new STLLoader();
 
-  loader.load("/src/assets/apex.STL", function (geometry) {
+  loader.load("/public/apex.STL", function (geometry) {
     let material = new THREE.MeshNormalMaterial({});
     let rocketMesh = new THREE.Mesh(geometry, material);
     geometry.center();

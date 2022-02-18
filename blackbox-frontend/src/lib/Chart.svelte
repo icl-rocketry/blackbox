@@ -138,7 +138,7 @@
         borderColor,
         backgroundColor: "transparent",
         radius: 0,
-        tension: 0.1,
+        tension: 0.5,
         borderWidth: 2,
       })),
     };

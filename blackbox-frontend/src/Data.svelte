@@ -43,22 +43,22 @@
 
   const socket = new WebSocket("ws://localhost:5000/ws"); //TODO: this will probably break when we've deployed it
 
+  let distance = writable(0);
   socket.onmessage = (event) => {
     const msg = JSON.parse(event.data);
     rocket_lat = msg["Location"]["Latitude"];
     rocket_long = msg["Location"]["Longitude"];
-    // data.add(msg["Pressure"]);
+    data.add(msg["Pressure"]);
   };
 
-  let distance = writable(0);
   setInterval(() => {
     distance.update((v) => v + Math.floor(Math.random() * 100));
-    data.add(Math.random() * 10);
+    // data.add(Math.random() * 10);
     simulation.add(Math.random() * 10);
     x += (Math.random() - 0.5) * 0.05;
     y += (Math.random() - 0.5) * 1;
     z += (Math.random() - 0.5) * 0.05;
-  }, 50);
+  }, 100);
 </script>
 
 <Modal

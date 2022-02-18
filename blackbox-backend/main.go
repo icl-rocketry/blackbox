@@ -35,6 +35,11 @@ type magnetometer struct {
 	tripleSensor
 }
 
+type location struct {
+	Latitude  float32
+	Longitude float32
+}
+
 type data struct {
 	Time         int
 	Acceleration accelerometer
@@ -42,6 +47,7 @@ type data struct {
 	Magnetometer magnetometer
 	Pressure     float32
 	Temperature  float32
+	Location     location
 }
 
 func dataHandler(ctx *gin.Context) {
@@ -74,6 +80,10 @@ func main() {
 			},
 			Pressure:    1.02,
 			Temperature: 32.1,
+			Location: location{
+				Latitude:  51.5007,
+				Longitude: -0.1246,
+			},
 		}
 		t := time.NewTicker(time.Second)
 		for range t.C {
@@ -83,6 +93,7 @@ func main() {
 
 	r.GET("/ws", dataHandler)
 	r.Use(static.Serve("/", static.LocalFile("../blackbox-frontend/dist", true)))
+	r.Use(static.Serve("/public/", static.LocalFile("../blackbox-frontend/public", true)))
 
 	r.Run()
 }
