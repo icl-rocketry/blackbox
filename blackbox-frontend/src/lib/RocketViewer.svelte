@@ -56,18 +56,18 @@
     let width = canvas.clientWidth;
     let camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 10000);
     let scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x1e293b);
+    scene.background = new THREE.Color(0x1e293b); //bg-slate-800
     let renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
 
     renderer.setSize(width, height);
-    let rocket = renderRocket(scene, camera);
+    renderRocket(scene, camera);
 
     const axesHelper = new THREE.AxesHelper(40);
     axesHelper.rotateX(xAxisRotationOffset);
     axesHelper.rotateY(yAxisRotationOffset);
     scene.add(axesHelper);
 
-    // Camera positioning - emperical position, seems to work
+    // Camera positioning - empirical position, seems to work
     camera.position.x = 0;
     camera.position.y = 0;
     camera.position.z = 90;
@@ -86,8 +86,7 @@
     GameLoop();
   }
 
-  window.renderOnCanvas = renderOnCanvas;
-  $: fullscreen, renderOnCanvas()
+  $: fullscreen, renderOnCanvas();
 </script>
 
 {#if fullscreen}

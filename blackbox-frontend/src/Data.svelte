@@ -54,9 +54,9 @@
   setInterval(() => {
     distance.update((v) => v + Math.floor(Math.random() * 100));
     simulation.add(Math.random() * 10);
-    x += (Math.random() - 0.5) * 0.01;
-    y += (Math.random() - 0.5) * 0.01;
-    z += (Math.random() - 0.5) * 0.01;
+    x += (Math.random() - 0.5) * 0.05;
+    y += (Math.random() - 0.5) * 1;
+    z += (Math.random() - 0.5) * 0.05;
   }, 50);
 </script>
 
@@ -80,11 +80,11 @@
           <Chart id="top_left" title="Acceleration" bind:data={$data} />
         </div>
       </Fullscreen>
-      <Fullscreen>
+      <Fullscreen let:fullscreen>
         <div
           class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full h-full"
         >
-          <Text generator={distance} units="meters" />
+          <Text generator={distance} units="meters" {fullscreen} />
         </div>
       </Fullscreen>
       <Fullscreen>
