@@ -3,14 +3,13 @@ package main
 import (
 	"bytes"
 	"encoding/binary"
-	"encoding/csv"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"net"
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
@@ -23,7 +22,7 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-const DATA_SIZE = 4 + 12 + 12 + 12 + 4 + 8
+const DATA_SIZE = 4 + 12 + 12 + 12 + 4 + 4 + 8
 
 var (
 	recording    = false
@@ -70,30 +69,30 @@ func fromBuf(buf *bytes.Buffer) data {
 		Time: int32(binary.BigEndian.Uint32(buf.Next(4))),
 		Acceleration: accelerometer{
 			tripleSensor: tripleSensor{
-				X: float32(binary.BigEndian.Uint32(buf.Next(4))),
-				Y: float32(binary.BigEndian.Uint32(buf.Next(4))),
-				Z: float32(binary.BigEndian.Uint32(buf.Next(4))),
+				X: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+				Y: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+				Z: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 			},
 		},
 		Gyroscope: gyroscope{
 			tripleSensor: tripleSensor{
-				X: float32(binary.BigEndian.Uint32(buf.Next(4))),
-				Y: float32(binary.BigEndian.Uint32(buf.Next(4))),
-				Z: float32(binary.BigEndian.Uint32(buf.Next(4))),
+				X: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+				Y: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+				Z: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 			},
 		},
 		Magnetometer: magnetometer{
 			tripleSensor: tripleSensor{
-				X: float32(binary.BigEndian.Uint32(buf.Next(4))),
-				Y: float32(binary.BigEndian.Uint32(buf.Next(4))),
-				Z: float32(binary.BigEndian.Uint32(buf.Next(4))),
+				X: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+				Y: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+				Z: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 			},
 		},
-		Pressure:    float32(binary.BigEndian.Uint32(buf.Next(4))),
-		Temperature: float32(binary.BigEndian.Uint32(buf.Next(4))),
+		Pressure:    math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+		Temperature: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 		Location: location{
-			Latitude:  float32(binary.BigEndian.Uint32(buf.Next(4))),
-			Longitude: float32(binary.BigEndian.Uint32(buf.Next(4))),
+			Latitude:  math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+			Longitude: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 		},
 	}
 }
@@ -103,14 +102,14 @@ func startHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, "Recording already started")
 	} else {
 		recording = true
-		ctx.JSON(http.StatusAccepted, "Recording started")
+		ctx.JSON(http.StatusOK, "Recording started")
 	}
 }
 
 func endHandler(ctx *gin.Context) {
 	if recording {
 		recording = false
-		ctx.JSON(http.StatusAccepted, "Recording ended")
+		ctx.JSON(http.StatusOK, "Recording ended")
 		saveChannel <- struct{}{}
 	} else {
 		ctx.JSON(http.StatusBadRequest, "Not currently recording")
@@ -143,18 +142,11 @@ func flush() {
 			log.Println("Couldn't create file because", err)
 			continue
 		}
-		w := csv.NewWriter(file)
-		w.Write([]string{
-			"Time",
-			"Acc_x", "Acc_y", "Acc_z",
-			"Gyro_x", "Gyro_y", "Gyro_z",
-			"Mag_x", "Mag_y", "Mag_z",
-			"Pressue", "Temperature",
-			"Longitude", "Latitude",
-		})
+		defer file.Close()
+		file.Write([]byte("Time, Acc_x, Acc_y, Acc_z, Gyro_x, Gyro_y, Gyro_z, Mag_x, Mag_y, Mag_z, Pressue, Temperature, Longitude, Latitude"))
 
 		for _, d := range recordedData {
-			err = w.Write([]string{
+			_, err = file.Write([]byte(
 				fmt.Sprintf("%d, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f",
 					d.Time,
 					d.Acceleration.X, d.Acceleration.Y, d.Acceleration.Z,
@@ -162,13 +154,12 @@ func flush() {
 					d.Magnetometer.X, d.Magnetometer.Y, d.Magnetometer.Z,
 					d.Pressure, d.Temperature,
 					d.Location.Longitude, d.Location.Latitude),
-			})
+			))
 			if err != nil {
 				log.Println("Couldn't log row because", err)
 				continue
 			}
 		}
-		w.Flush()
 	}
 }
 
@@ -183,7 +174,7 @@ func udpServer() {
 		buf := make([]byte, DATA_SIZE*50)
 		n, _, err := pc.ReadFrom(buf)
 		if err != nil || n < DATA_SIZE || !recording {
-			log.Panicln("Couldn't read from UDP socket because", err)
+			log.Println("Couldn't read from UDP socket because", err, n, recording)
 			continue
 		}
 
@@ -199,31 +190,6 @@ func serve(buf *bytes.Buffer) {
 
 func main() {
 	r := gin.Default()
-
-	go func() {
-		d := data{
-			Time: 3,
-			Acceleration: accelerometer{
-				tripleSensor: tripleSensor{X: 1, Y: 2, Z: 3},
-			},
-			Gyroscope: gyroscope{
-				tripleSensor: tripleSensor{X: 1, Y: 2, Z: 3},
-			},
-			Magnetometer: magnetometer{
-				tripleSensor: tripleSensor{X: 1, Y: 2, Z: 3},
-			},
-			Pressure:    1.02,
-			Temperature: 32.1,
-			Location: location{
-				Latitude:  51.5007,
-				Longitude: -0.1246,
-			},
-		}
-		t := time.NewTicker(time.Second)
-		for range t.C {
-			dataChannel <- d
-		}
-	}()
 
 	go flush()
 	go udpServer()
