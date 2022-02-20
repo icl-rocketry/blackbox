@@ -1,7 +1,22 @@
 package main
 
+/*This could be better abstracted, but since we aren't really using it too heavily, this is alright
+as an MVP.
+
+A client connects to ws://localhost:PORT/ws, which registers a channel in clients.
+When a udp packet arrives (from anyone in the world - nice security issue there), if we're recording,
+then record it and broadcast it to all clients.
+When a client receives from its channel, it sends the data via websocket to the frontend it's connected
+to.
+
+To start recording, send an empty POST request to /start.
+To end recording, send an empty POST request to /end.
+
+*/
+
 import (
 	"net/http"
+	"sync"
 
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
@@ -18,7 +33,8 @@ var (
 	recording    = false
 	recordedData = make([]data, 0)
 	saveChannel  = make(chan struct{}) // Use to save data
-	dataChannel  = make(chan data)
+	clientMutex  = sync.RWMutex{}
+	clients      = make([]chan<- data, 0)
 )
 
 func startHandler(ctx *gin.Context) {
@@ -46,11 +62,20 @@ func dataHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, "Couldn't upgrade to websocket")
 	}
 
+	dataChannel := make(chan data)
+	addClient(dataChannel)
+
 	for d := range dataChannel {
 		if err = conn.WriteJSON(d); err != nil {
-			return
+			return // TODO: This causes a memory leak but MVP
 		}
 	}
+}
+
+func addClient(channel chan<- data) {
+	clientMutex.Lock()
+	clients = append(clients, channel)
+	clientMutex.Unlock()
 }
 
 func main() {
