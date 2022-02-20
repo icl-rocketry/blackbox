@@ -37,7 +37,7 @@ jobs:
       - name: rsync deploy
         uses: burnett01/rsync-deployments@5.2
         with:
-          switches: -avzrh --delete
+          switches: -avzrh --delete --dry-run
           path: blackbox-frontend/
           remote_path: ${{ secrets.DEPLOY_PATH }}
           remote_host: ${{ secrets.SSH_HOST }}
