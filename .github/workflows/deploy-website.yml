@@ -30,7 +30,7 @@ jobs:
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
         with:
-          key: ${{ secrets.TELEMETRY_SERVER_SSH_PRIV }
+          key: ${{ secrets.TELEMETRY_SERVER_SSH_PRIV }}
           known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
       - name: Add to Known Hosts
         run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
