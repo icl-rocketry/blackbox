@@ -51,6 +51,10 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v2
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: Upload artifacts
       - name: ls
         run: |
           ls blackbox-backend/
