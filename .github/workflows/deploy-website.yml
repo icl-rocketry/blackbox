@@ -1,0 +1,46 @@
+# This is a basic workflow to help you get started with Actions
+# Following https://zellwk.com/blog/github-actions-deploy/
+# and https://github.com/marketplace/actions/rsync-deployments-action
+
+name: Deploy Website
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    environment: server deploy
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Check Out Repo
+        uses: actions/checkout@v2
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.TELEMETRY_SERVER_SSH_PRIV }}
+          known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
+      - name: Add to Known Hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: rsync deploy
+        uses: burnett01/rsync-deployments@5.2
+        with:
+          switches: -avzrh --delete --dry-run
+          path: blackbox-frontend/
+          remote_path: ${{ secrets.DEPLOY_PATH }}
+          remote_host: ${{ secrets.SSH_HOST }}
+          remote_port: ${{ secrets.SSH_PORT }}
+          remote_user: ${{ secrets.SSH_USER }}
+          remote_key: ${{ secrets.TELEMETRY_SERVER_SSH_PRIV }}
