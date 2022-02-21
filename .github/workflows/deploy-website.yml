@@ -102,11 +102,15 @@ jobs:
           key: ${{ secrets.TELEMETRY_SERVER_SSH_PRIV }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            echo cd into dir
             cd ${{ secrets.BACKEND_DEPLOY_PATH }}
+            echo make executable
             chmod +x blackbox
+            echo set env
             export PORT=3000
             export HTML_PATH=${{ secrets.BACKEND_DEPLOY_PATH }}
-            nohup ./blackbox > bb.out &
+            echo start server
+            nohup ./blackbox &
           
       
             
