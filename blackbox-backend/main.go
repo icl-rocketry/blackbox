@@ -15,6 +15,7 @@ To end recording, send an empty POST request to /end.
 */
 
 import (
+	"log"
 	"net/http"
 	"os"
 	"sync"
@@ -81,6 +82,7 @@ func addClient(channel chan<- data) {
 
 func main() {
 	HTML_PATH := os.Getenv("HTML_PATH")
+	log.Println(HTML_PATH)
 	r := gin.Default()
 
 	go flush()
