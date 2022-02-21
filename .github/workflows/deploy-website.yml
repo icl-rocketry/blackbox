@@ -92,11 +92,18 @@ jobs:
           key: ${{ secrets.TELEMETRY_SERVER_SSH_PRIV }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            lscpu
+            echo cd into dir
             cd ${{ secrets.BACKEND_DEPLOY_PATH }}
-            kill $(ps ax | 'grep [b]lackbox' | awk'{print$1}')
+            echo kill existing server
+            nohup kill $(ps ax | grep '[b]lackbox' | awk '{print$1}') || true &
+            echo make executable
             chmod +x blackbox
+            echo set listen port
             export PORT=3000
-            export HTML_PATH ${{ secrets.BACKEND_DEPLOY_PATH }}
+            echo set html path
+            export HTML_PATH=${{ secrets.BACKEND_DEPLOY_PATH }}
+            echo start server
             nohup ./blackbox &
           
       
