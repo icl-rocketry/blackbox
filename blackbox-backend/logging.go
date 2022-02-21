@@ -24,7 +24,6 @@ func flush() {
 			log.Println("Couldn't create file because", err)
 			continue
 		}
-		defer file.Close()
 		file.Write([]byte("Time, Acc_x, Acc_y, Acc_z, Gyro_x, Gyro_y, Gyro_z, Mag_x, Mag_y, Mag_z, Pressue, Temperature, Longitude, Latitude"))
 
 		for _, d := range recordedData {
@@ -42,5 +41,6 @@ func flush() {
 				continue
 			}
 		}
+		file.Close()
 	}
 }

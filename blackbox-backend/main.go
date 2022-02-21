@@ -90,7 +90,7 @@ func main() {
 	r.POST("/start", startHandler)
 	r.POST("/end", endHandler)
 	r.Use(static.Serve("/", static.LocalFile(HTML_PATH+"/dist", true)))
-	r.Use(static.Serve("/public/", static.LocalFile(HTML_PATH+"/blackbox-frontend/public", true)))
+	r.Use(static.Serve("/public/", static.LocalFile(HTML_PATH+"/public", true)))
 
 	r.Run()
 }
