@@ -14,7 +14,10 @@
   const yAxisRotationOffset = -Math.PI / 4;
 
   let updatePositionFunc = (_: number, __: number, ___: number) => {};
-  let renderRocket = (_: THREE.Scene, __: THREE.Camera) => {};
+  let renderRocket = (scene: THREE.Scene, camera: THREE.Camera) => {
+    //This function will have a different value once the rocket has actually been loaded
+    setTimeout(() => renderRocket(scene, camera), 500);
+  };
 
   $: updatePositionFunc(x, y, z);
 
