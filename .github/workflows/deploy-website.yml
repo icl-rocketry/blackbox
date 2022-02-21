@@ -103,7 +103,6 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd ${{ secrets.BACKEND_DEPLOY_PATH }}
-            nohup kill $(ps ax | grep '[b]lackbox' | awk '{print$1}') || true &
             chmod +x blackbox
             export PORT=3000
             export HTML_PATH=${{ secrets.BACKEND_DEPLOY_PATH }}
