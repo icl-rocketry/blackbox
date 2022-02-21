@@ -110,7 +110,7 @@ jobs:
             export PORT=3000
             export HTML_PATH=${{ secrets.DEPLOY_PATH }}
             echo start server
-            nohup ./blackbox &
+            nohup ./blackbox < /dev/null & > /dev/null &
             sleep 5
             curl -X POST http://live.imperialrocketry.com/end
       
