@@ -4,13 +4,14 @@ import struct
 import time
 import requests
 
-IP = "127.0.0.1"
+IP = "143.47.241.215"
+URL = "live.imperialrocketry.com"
 
-UDP_PORT = 1053
+UDP_PORT = 2052
 WEBSITE_PORT = 5000
 
-print(requests.post(url=f"http://{IP}:{WEBSITE_PORT}/end"))
-print(requests.post(url=f"http://{IP}:{WEBSITE_PORT}/start"))
+print(requests.post(url=f"http://{URL}/end"))
+print(requests.post(url=f"http://{URL}/start"))
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -22,4 +23,4 @@ try:
 except KeyboardInterrupt:
     pass
 
-print(requests.post(url=f"http://{IP}:{WEBSITE_PORT}/end"))
+print(requests.post(url=f"http://{URL}/end"))

@@ -6,8 +6,10 @@ import (
 	"net"
 )
 
+const UDP_PORT = "2052"
+
 func udpServer() {
-	pc, err := net.ListenPacket("udp", ":1053")
+	pc, err := net.ListenPacket("udp", ":"+UDP_PORT)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -27,6 +29,7 @@ func udpServer() {
 
 func serve(buf *bytes.Buffer) {
 	data := fromBuf(buf)
+	log.Println(data)
 	clientMutex.RLock()
 	for _, dataChannel := range clients {
 		dataChannel <- data
