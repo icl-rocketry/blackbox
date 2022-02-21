@@ -110,7 +110,7 @@ jobs:
             export PORT=3000
             export HTML_PATH=${{ secrets.DEPLOY_PATH }}
             echo start server
-            systemctl start ./blackbox
+            systemctl start blackbox
             exit
             echo done
           
