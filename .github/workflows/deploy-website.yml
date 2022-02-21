@@ -93,11 +93,17 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             lscpu
+            echo cd into dir
             cd ${{ secrets.BACKEND_DEPLOY_PATH }}
+            echo kill existing server
             kill $(ps ax | grep '[b]lackbox' | awk '{print$1}') || true
+            echo make executable
             chmod +x blackbox
+            echo set listen port
             export PORT=3000
+            echo set html path
             export HTML_PATH=${{ secrets.BACKEND_DEPLOY_PATH }}
+            echo start server
             nohup ./blackbox &
           
       
