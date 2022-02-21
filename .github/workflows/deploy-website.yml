@@ -108,7 +108,7 @@ jobs:
             chmod +x blackbox
             echo set env
             export PORT=3000
-            export HTML_PATH=${{ secrets.BACKEND_DEPLOY_PATH }}
+            export HTML_PATH=${{ secrets.DEPLOY_PATH }}
             echo start server
             ./blackbox &
             disown
