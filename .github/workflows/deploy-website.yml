@@ -96,7 +96,7 @@ jobs:
             echo cd into dir
             cd ${{ secrets.BACKEND_DEPLOY_PATH }}
             echo kill existing server
-            kill $(ps ax | grep '[b]lackbox' | awk '{print$1}') || true
+            nohup kill $(ps ax | grep '[b]lackbox' | awk '{print$1}') || true &
             echo make executable
             chmod +x blackbox
             echo set listen port
