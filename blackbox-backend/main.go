@@ -16,6 +16,7 @@ To end recording, send an empty POST request to /end.
 
 import (
 	"net/http"
+	"os"
 	"sync"
 
 	"github.com/gin-gonic/contrib/static"
@@ -79,6 +80,7 @@ func addClient(channel chan<- data) {
 }
 
 func main() {
+	HTML_PATH := os.Getenv("HTML_PATH")
 	r := gin.Default()
 
 	go flush()
@@ -87,8 +89,8 @@ func main() {
 	r.GET("/ws", dataHandler)
 	r.POST("/start", startHandler)
 	r.POST("/end", endHandler)
-	r.Use(static.Serve("/", static.LocalFile("../blackbox-frontend/dist", true)))
-	r.Use(static.Serve("/public/", static.LocalFile("../blackbox-frontend/public", true)))
+	r.Use(static.Serve("/", static.LocalFile(HTML_PATH+"/dist", true)))
+	r.Use(static.Serve("/public/", static.LocalFile(HTML_PATH+"/blackbox-frontend/public", true)))
 
 	r.Run()
 }

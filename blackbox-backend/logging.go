@@ -11,8 +11,12 @@ func flush() {
 	for range saveChannel {
 		files, err := ioutil.ReadDir("./data/")
 		if err != nil {
-			log.Println("Couldn't read data directory because", err)
-			continue
+			log.Println("Creating data directory because:", err)
+			err = os.Mkdir("./data/", os.ModePerm)
+			if err != nil {
+				log.Println("Couldn't create data directory because: ", err)
+				continue
+			}
 		}
 		filename := fmt.Sprintf("data_%d.csv", len(files))
 		file, err := os.Create("./data/" + filename)
