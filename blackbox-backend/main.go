@@ -82,7 +82,7 @@ func addClient(channel chan<- data) {
 
 func main() {
 	HTML_PATH := os.Getenv("HTML_PATH")
-	log.Println(HTML_PATH)
+	log.Println("The HTML_PATH is: " + HTML_PATH)
 	r := gin.Default()
 
 	go flush()
