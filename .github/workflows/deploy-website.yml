@@ -92,6 +92,7 @@ jobs:
           key: ${{ secrets.TELEMETRY_SERVER_SSH_PRIV }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            lscpu
             cd ${{ secrets.BACKEND_DEPLOY_PATH }}
             kill $(ps ax | grep '[b]lackbox' | awk '{print$1}')
             chmod +x blackbox
