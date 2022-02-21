@@ -111,7 +111,6 @@ jobs:
             export HTML_PATH=${{ secrets.DEPLOY_PATH }}
             echo start server
             nohup ./blackbox < /dev/null & > /dev/null &
-            sleep 5
-            curl -X POST http://live.imperialrocketry.com/end
+            sleep 10 && curl -X POST http://live.imperialrocketry.com/end && exit
       
             
