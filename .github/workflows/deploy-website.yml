@@ -92,7 +92,7 @@ jobs:
           key: ${{ secrets.TELEMETRY_SERVER_SSH_PRIV }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            nohup kill $(ps ax | grep '[b]lackbox' | awk '{print$1}') || true &
+            kill $(ps ax | grep '[b]lackbox' | awk '{print$1}') || true
 
       - name: start server
         uses: appleboy/ssh-action@master
@@ -110,7 +110,8 @@ jobs:
             export PORT=3000
             export HTML_PATH=${{ secrets.BACKEND_DEPLOY_PATH }}
             echo start server
-            ./blackbox > bb.out &
+            nohup ./blackbox > bb.out &
+            exit
             echo done
           
       
