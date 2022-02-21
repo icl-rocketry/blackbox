@@ -94,7 +94,9 @@ jobs:
           script: |
             cd ${{ secrets.BACKEND_DEPLOY_PATH }}
             kill $(ps ax | 'grep [b]lackbox' | awk'{print$1}')
+            chmod +x blackbox
             export PORT=3000
+            export HTML_PATH ${{ secrets.BACKEND_DEPLOY_PATH }}
             nohup ./blackbox &
           
       
