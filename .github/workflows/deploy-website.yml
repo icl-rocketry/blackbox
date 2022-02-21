@@ -97,7 +97,7 @@ jobs:
             chmod +x blackbox
             export PORT=3000
             export HTML_PATH=${{ secrets.BACKEND_DEPLOY_PATH }}
-            nohup ./blackbox > bb.out 2> bb.err &
+            ./blackbox
           
       
             
