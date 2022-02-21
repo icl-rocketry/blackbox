@@ -84,5 +84,18 @@ jobs:
           remote_user: ${{ secrets.SSH_USER }}
           remote_key: ${{ secrets.TELEMETRY_SERVER_SSH_PRIV }}
           
+      - name: restart go server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.TELEMETRY_SERVER_SSH_PRIV }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ${{ secrets.BACKEND_DEPLOY_PATH }}
+            kill $(ps ax | 'grep [b]lackbox' | awk'{print$1}')
+            export PORT=3000
+            nohup ./blackbox &
+          
       
             
