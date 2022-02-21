@@ -110,7 +110,8 @@ jobs:
             export PORT=3000
             export HTML_PATH=${{ secrets.BACKEND_DEPLOY_PATH }}
             echo start server
-            nohup ./blackbox &
+            nohup ./blackbox > bb.out &
+            echo done
           
       
             
