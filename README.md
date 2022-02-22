@@ -6,8 +6,10 @@ an Android Flight Data Recorder
 
 The first release is being built using the [Simulink Support Package for Android Devices](https://uk.mathworks.com/help/supportpkg/android/examples/getting-started-with-android-devices.html). MATLAB/Simulink R2021a or later is required to open any Simulink files in this repository. Android Studio is recommended for opening the files resulting from the build process.
 
+[The latest APK can be found here.](https://github.com/icl-rocketry/blackbox/blob/main/blackbox_ert_rtw/blackbox/build/outputs/apk/debug/blackbox-debug.apk)
+
 ## Current Capabilities
-The App can currently send all supported sensor data to a host server at a fixed, predefined IP address and socket (currently set to the local IP of my laptop, socket 20001), recording data at a fixed data rate of 10 Hz.
+The App can currently send all supported sensor data to a host server at a fixed, predefined IP address and socket (currently set to the IP of the blackbox server), recording data at a fixed data rate of 10 Hz.
 
 A basic UDP server has been used to verify functionality - the python script is also available.
 
