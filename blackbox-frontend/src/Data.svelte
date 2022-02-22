@@ -41,7 +41,7 @@
   let y = 0;
   let z = 0;
 
-  const socket = new WebSocket("ws://localhost:5000/ws"); //TODO: this will probably break when we've deployed it
+  const socket = new WebSocket("wss://live.imperialrocketry.com/ws");
 
   let distance = writable(0);
   socket.onmessage = (event) => {

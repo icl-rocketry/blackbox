@@ -71,7 +71,8 @@ func dataHandler(ctx *gin.Context) {
 		log.Println("Logging data", d)
 		if err = conn.WriteJSON(d); err != nil {
 			log.Println(err)
-			return // TODO: This causes a memory leak but MVP
+			close(dataChannel)
+			return // The memory leak is taken care of in udp.go
 		}
 	}
 }
