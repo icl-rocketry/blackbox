@@ -29,9 +29,9 @@ func udpServer() {
 
 func serve(buf *bytes.Buffer) {
 	data := fromBuf(buf)
-	log.Println(data)
 	clientMutex.RLock()
-	for _, dataChannel := range clients {
+	for i, dataChannel := range clients {
+		log.Println("Sending data to client: ", i)
 		dataChannel <- data
 	}
 	clientMutex.RUnlock()
