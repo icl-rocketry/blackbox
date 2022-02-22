@@ -28,12 +28,24 @@ func udpServer() {
 }
 
 func serve(buf *bytes.Buffer) {
-	data := fromBuf(buf)
+	recvd := fromBuf(buf)
 	clientMutex.RLock()
+	defer clientMutex.RUnlock()
 	for i, dataChannel := range clients {
-		log.Println("Sending data to client: ", i)
-		dataChannel <- data
+		// This is terrible - Akshat Tripathi Tuesday 22/2/22
+		go func(dataChannel chan<- data, i int) {
+			defer func(i int) {
+				clientMutex.Lock()
+				defer clientMutex.Unlock()
+				if r := recover(); r != nil {
+					log.Println("Recovered in f", r)
+					clients = append(clients[:i], clients[i+1:]...)
+				}
+			}(i)
+
+			log.Println("Sending data to client: ", i)
+			dataChannel <- recvd
+		}(dataChannel, i)
 	}
-	clientMutex.RUnlock()
-	recordedData = append(recordedData, data)
+	recordedData = append(recordedData, recvd)
 }
