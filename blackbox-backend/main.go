@@ -69,6 +69,7 @@ func dataHandler(ctx *gin.Context) {
 
 	for d := range dataChannel {
 		if err = conn.WriteJSON(d); err != nil {
+			log.Println(err)
 			return // TODO: This causes a memory leak but MVP
 		}
 	}
