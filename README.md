@@ -1,6 +1,9 @@
 # blackbox
 an Android Flight Data Recorder
 
+[![Deploy Website](https://github.com/icl-rocketry/blackbox/actions/workflows/deploy-website.yml/badge.svg)](https://github.com/icl-rocketry/blackbox/actions/workflows/deploy-website.yml)
+[![CodeQL](https://github.com/icl-rocketry/blackbox/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/icl-rocketry/blackbox/actions/workflows/codeql-analysis.yml)
+
 The first release is being built using the [Simulink Support Package for Android Devices](https://uk.mathworks.com/help/supportpkg/android/examples/getting-started-with-android-devices.html). MATLAB/Simulink R2021a or later is required to open any Simulink files in this repository. Android Studio is recommended for opening the files resulting from the build process.
 
 ## Current Capabilities
