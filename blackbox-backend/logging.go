@@ -28,13 +28,14 @@ func flush() {
 
 		for _, d := range recordedData {
 			_, err = file.Write([]byte(
-				fmt.Sprintf("%d, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f",
+				fmt.Sprintf("%d, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f",
 					d.Time,
-					d.Acceleration.X, d.Acceleration.Y, d.Acceleration.Z,
+					d.Orientation.X, d.Orientation.Y, d.Orientation.Z,
 					d.Gyroscope.X, d.Gyroscope.Y, d.Gyroscope.Z,
+					d.Acceleration.X, d.Acceleration.Y, d.Acceleration.Z,
 					d.Magnetometer.X, d.Magnetometer.Y, d.Magnetometer.Z,
-					d.Pressure, d.Temperature,
-					d.Location.Longitude, d.Location.Latitude),
+					d.Location.Longitude, d.Location.Latitude, d.Location.Altitude,
+					d.Temperature, d.Lux, d.Pressure),
 			))
 			if err != nil {
 				log.Println("Couldn't log row because", err)
