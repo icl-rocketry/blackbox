@@ -29,6 +29,7 @@ type magnetometer struct {
 type location struct {
 	Latitude  float32
 	Longitude float32
+	altitude float32
 }
 
 type data struct {
