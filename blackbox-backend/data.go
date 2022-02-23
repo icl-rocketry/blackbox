@@ -85,8 +85,9 @@ func fromBuf(buf *bytes.Buffer) data {
 			Longitude: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 			Altitude: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 		},
-		Pressure:    math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 		Temperature: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+		Lux: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+		Pressure:    math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 		
 	}
 }
