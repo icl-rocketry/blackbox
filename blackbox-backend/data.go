@@ -38,12 +38,15 @@ type location struct {
 
 type data struct {
 	Time         int32
-	Acceleration accelerometer
+	Orientation  orientation
 	Gyroscope    gyroscope
+	Acceleration accelerometer	
 	Magnetometer magnetometer
-	Pressure     float32
-	Temperature  float32
 	Location     location
+	Temperature  float32
+	Pressure     float32
+	Lux 		 float32
+	
 }
 
 func fromBuf(buf *bytes.Buffer) data {
