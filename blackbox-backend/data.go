@@ -52,7 +52,7 @@ type data struct {
 func fromBuf(buf *bytes.Buffer) data {
 	return data{
 		Time: int32(binary.BigEndian.Uint32(buf.Next(4))),
-		Acceleration: accelerometer{
+		Orientation: orientation{
 			tripleCartesian: tripleCartesian{
 				X: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 				Y: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
@@ -66,6 +66,13 @@ func fromBuf(buf *bytes.Buffer) data {
 				Z: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 			},
 		},
+		Acceleration: accelerometer{
+			tripleCartesian: tripleCartesian{
+				X: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+				Y: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+				Z: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+			},
+		},		
 		Magnetometer: magnetometer{
 			tripleCartesian: tripleCartesian{
 				X: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
