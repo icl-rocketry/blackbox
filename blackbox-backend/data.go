@@ -33,7 +33,7 @@ type magnetometer struct {
 type location struct {
 	Latitude  float32
 	Longitude float32
-	altitude float32
+	Altitude float32
 }
 
 type data struct {
@@ -80,11 +80,13 @@ func fromBuf(buf *bytes.Buffer) data {
 				Z: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 			},
 		},
-		Pressure:    math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
-		Temperature: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 		Location: location{
 			Latitude:  math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 			Longitude: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+			Altitude: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 		},
+		Pressure:    math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+		Temperature: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+		
 	}
 }
