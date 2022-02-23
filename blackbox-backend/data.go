@@ -6,7 +6,7 @@ import (
 	"math"
 )
 
-const DATA_SIZE = 4 + 12 + 12 + 12 + 4 + 4 + 8
+const DATA_SIZE = 4 + 12 + 12 + 12 + 12 + 12 + 4 + 4 + 4
 
 type tripleCartesian struct {
 	X float32
