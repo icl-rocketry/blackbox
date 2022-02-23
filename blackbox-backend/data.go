@@ -14,6 +14,10 @@ type tripleCartesian struct {
 	Z float32
 }
 
+type orientation struct {
+	tripleCartesian
+}
+
 type accelerometer struct {
 	tripleCartesian
 }
