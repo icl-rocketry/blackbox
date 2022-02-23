@@ -8,22 +8,22 @@ import (
 
 const DATA_SIZE = 4 + 12 + 12 + 12 + 4 + 4 + 8
 
-type tripleSensor struct {
+type tripleCartesian struct {
 	X float32
 	Y float32
 	Z float32
 }
 
 type accelerometer struct {
-	tripleSensor
+	tripleCartesian
 }
 
 type gyroscope struct {
-	tripleSensor
+	tripleCartesian
 }
 
 type magnetometer struct {
-	tripleSensor
+	tripleCartesian
 }
 
 type location struct {
@@ -45,21 +45,21 @@ func fromBuf(buf *bytes.Buffer) data {
 	return data{
 		Time: int32(binary.BigEndian.Uint32(buf.Next(4))),
 		Acceleration: accelerometer{
-			tripleSensor: tripleSensor{
+			tripleCartesian: tripleCartesian{
 				X: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 				Y: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 				Z: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 			},
 		},
 		Gyroscope: gyroscope{
-			tripleSensor: tripleSensor{
+			tripleCartesian: tripleCartesian{
 				X: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 				Y: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 				Z: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 			},
 		},
 		Magnetometer: magnetometer{
-			tripleSensor: tripleSensor{
+			tripleCartesian: tripleCartesian{
 				X: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 				Y: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
 				Z: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
