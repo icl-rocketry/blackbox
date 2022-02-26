@@ -1,11 +1,12 @@
 <script lang="ts">
   import Data from "./Data.svelte";
+import Footer from "./Footer.svelte";
 </script>
 
 <main>
   <div class="h-screen flex flex-col justify-between">
     <Data/>
-    <div class="bg-blue-400 h-10">HELLO</div>
+    <Footer/>
   </div>
 </main>
 
