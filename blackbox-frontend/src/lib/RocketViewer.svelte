@@ -93,10 +93,12 @@
 </script>
 
 {#if fullscreen}
-  <canvas
-    id="canvas-full"
-    class="object-cover min-h-full min-w-full rounded-xl row-span-2"
-  />
+  <div class="h-full w-full flex flex-row justify-center bg-slate-800">
+    <canvas
+      id="canvas-full"
+      class="object-cover min-h-full max-w-full rounded-xl row-span-2"
+    />
+  </div>
 {:else}
   <canvas
     id="canvas-mini"

@@ -70,27 +70,27 @@
   }}
   closeButton={false}
 >
-  <div class="bg-slate-900 min-h-screen flex items-center justify-center">
+  <div class="bg-slate-900 h-full flex items-center justify-center">
     <div
-      class="grid sm:grid-cols-1 lg:grid-cols-4 gap-2 min-h-screen min-w-full overflow-y-visible"
+      class="grid sm:grid-cols-1 lg:grid-cols-4 gap-2 h-full min-w-full overflow-y-visible"
     >
       <Fullscreen>
         <div
-          class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full h-full"
+          class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full"
         >
           <Chart id="top_left" title="Acceleration" bind:data={$data} />
         </div>
       </Fullscreen>
       <Fullscreen let:fullscreen>
         <div
-          class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full h-full"
+          class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full"
         >
           <Text generator={distance} units="meters" {fullscreen} />
         </div>
       </Fullscreen>
       <Fullscreen>
         <div
-          class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full h-full"
+          class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full"
         >
           <Chart id="2" title="Altitude" bind:data={$simulation} />
         </div>

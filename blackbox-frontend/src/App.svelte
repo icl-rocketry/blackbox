@@ -3,7 +3,10 @@
 </script>
 
 <main>
-  <Data/>
+  <div class="h-screen flex flex-col justify-between">
+    <Data/>
+    <div class="bg-blue-400 h-10">HELLO</div>
+  </div>
 </main>
 
 <style global>
