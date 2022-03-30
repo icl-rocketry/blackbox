@@ -30,7 +30,7 @@
   function createMap(container: HTMLDivElement) {
     let m = Leaflet.map(container, {
       zoomControl: false,
-    }).setView([51.505, -0.09], 13);
+    }).setView([52.6709229, -1.5251725], 13); //MRC location
     Leaflet.tileLayer(
       "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
       {
