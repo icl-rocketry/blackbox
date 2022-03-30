@@ -10,11 +10,10 @@
   import Text from "./lib/Text.svelte";
   import RocketViewer from "./lib/RocketViewer.svelte";
 
-  const data = new RollingWindowChart(100, [
-    {
-      label: "X",
-      colour: "#FF0000",
-    },
+  const acceleration = new RollingWindowChart(100, [
+    { label: "X", colour: "#FF0000" },
+    { label: "Y", colour: "#00FF00" },
+    { label: "Z", colour: "#0000FF" },
   ]);
 
   const simulation = new SimulatedChart(
@@ -34,8 +33,8 @@
     },
   ]);
 
-  let rocket_lat = 51.5007;
-  let rocket_long = -0.1246;
+  let rocket_lat = 0;
+  let rocket_long = 0;
 
   let x = 0;
   let y = 0;
@@ -43,22 +42,39 @@
 
   const socket = new WebSocket("wss://live.imperialrocketry.com/ws");
 
-  let distance = writable(0);
+  interface TripleCartesian {
+    X: number;
+    Y: number;
+    Z: number;
+  }
+  interface DataMessage {
+    Time: number;
+    Orientation: TripleCartesian;
+    Gyroscope: TripleCartesian;
+    Acceleration: TripleCartesian;
+    Magnetometer: TripleCartesian;
+    Location: {
+      Latitude: number;
+      Longitude: number;
+      Altitude: number;
+    };
+    Temperature: number;
+    Pressure: number;
+    Lux: number;
+  }
+
+  let altitude_num = writable(0);
   socket.onmessage = (event) => {
-    const msg = JSON.parse(event.data);
-    rocket_lat = msg["Location"]["Latitude"];
-    rocket_long = msg["Location"]["Longitude"];
-    data.add(msg["Pressure"]);
+    const msg: DataMessage = JSON.parse(event.data);
+    rocket_lat = msg.Location.Latitude;
+    rocket_long = msg.Location.Longitude;
+    acceleration.add(msg.Acceleration.X, msg.Acceleration.Y, msg.Acceleration.Z);
+    altitude_num.update((_) => msg.Location.Altitude);
+    x = msg.Orientation.X;
+    y = msg.Orientation.Y;
+    z = msg.Orientation.Z;
   };
 
-  setInterval(() => {
-    distance.update((v) => v + Math.floor(Math.random() * 100));
-    // data.add(Math.random() * 10);
-    simulation.add(Math.random() * 10);
-    x += (Math.random() - 0.5) * 0.05;
-    y += (Math.random() - 0.5) * 1;
-    z += (Math.random() - 0.5) * 0.05;
-  }, 100);
 </script>
 
 <Modal
@@ -78,14 +94,14 @@
         <div
           class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full h-full"
         >
-          <Chart id="top_left" title="Acceleration" bind:data={$data} />
+          <Chart id="top_left" title="Acceleration" bind:data={$acceleration} />
         </div>
       </Fullscreen>
       <Fullscreen let:fullscreen>
         <div
           class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full h-full"
         >
-          <Text generator={distance} units="meters" {fullscreen} />
+          <Text generator={altitude_num} units="meters" {fullscreen} />
         </div>
       </Fullscreen>
       <Fullscreen>
@@ -116,7 +132,7 @@
       </div>
 
       <Fullscreen rows={2} let:fullscreen>
-        <RocketViewer {x} {y} {z} {fullscreen}/>
+        <RocketViewer {x} {y} {z} {fullscreen} />
       </Fullscreen>
       <Fullscreen>
         <div
