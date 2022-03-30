@@ -15,6 +15,19 @@
     { label: "Y", colour: "#00FF00" },
     { label: "Z", colour: "#0000FF" },
   ]);
+  const rotation = new RollingWindowChart(100, [
+    { label: "X", colour: "#FF0000" },
+    { label: "Y", colour: "#00FF00" },
+    { label: "Z", colour: "#0000FF" },
+  ]);
+  const magnetic_field = new RollingWindowChart(100, [
+    { label: "X", colour: "#FF0000" },
+    { label: "Y", colour: "#00FF00" },
+    { label: "Z", colour: "#0000FF" },
+  ]);
+  const velocity = new RollingWindowChart(100, [
+    { label: "Vertical Velocity", colour: "#EEEEEE" },
+  ]);
 
   const simulation = new SimulatedChart(
     "Altitude",
@@ -68,13 +81,24 @@
     const msg: DataMessage = JSON.parse(event.data);
     rocket_lat = msg.Location.Latitude;
     rocket_long = msg.Location.Longitude;
-    acceleration.add(msg.Acceleration.X, msg.Acceleration.Y, msg.Acceleration.Z);
-    altitude_num.update((_) => msg.Location.Altitude);
-    x = msg.Orientation.X * Math.PI / 180;
-    y = msg.Orientation.Y * Math.PI / 180;
-    z = msg.Orientation.Z * Math.PI / 180;
-  };
 
+    acceleration.add(
+      msg.Acceleration.X,
+      msg.Acceleration.Y,
+      msg.Acceleration.Z
+    );
+    rotation.add(msg.Gyroscope.X, msg.Gyroscope.Y, msg.Gyroscope.Z);
+    magnetic_field.add(
+      msg.Magnetometer.X,
+      msg.Magnetometer.Y,
+      msg.Magnetometer.Z
+    );
+
+    altitude_num.update((_) => msg.Location.Altitude);
+    x = (msg.Orientation.X * Math.PI) / 180;
+    y = (msg.Orientation.Y * Math.PI) / 180;
+    z = (msg.Orientation.Z * Math.PI) / 180;
+  };
 </script>
 
 <Modal
@@ -94,7 +118,13 @@
         <div
           class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full"
         >
-          <Chart id="top_left" title="Acceleration" bind:data={$acceleration} yMax={30} yMin={-30}/>
+          <Chart
+            id="top_left"
+            title="Acceleration"
+            bind:data={$acceleration}
+            yMax={30}
+            yMin={-30}
+          />
         </div>
       </Fullscreen>
       <Fullscreen let:fullscreen>
@@ -115,14 +145,14 @@
         <div
           class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full"
         >
-          <Chart id="3" title="Dummy" bind:data={$d2} />
+          <Chart id="3" title="Velocity" bind:data={$velocity} />
         </div>
       </Fullscreen>
       <Fullscreen>
         <div
           class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full"
         >
-          <Chart id="4" title="Dummy" bind:data={$d2} />
+          <Chart id="4" title="Rotation" bind:data={$rotation} yMin={-20} yMax={20}/>
         </div>
       </Fullscreen>
       <div
@@ -138,7 +168,7 @@
         <div
           class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full"
         >
-          <Chart id="6" title="Dummy" bind:data={$d2} />
+          <Chart id="6" title="Magnetic Field" bind:data={$magnetic_field} yMin={-100} yMax={100}/>
         </div>
       </Fullscreen>
     </div>
