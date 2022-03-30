@@ -33,61 +33,59 @@ type magnetometer struct {
 type location struct {
 	Latitude  float32
 	Longitude float32
-	Altitude float32
+	Altitude  float32
 }
 
 type data struct {
 	Time         int32
 	Orientation  orientation
 	Gyroscope    gyroscope
-	Acceleration accelerometer	
+	Acceleration accelerometer
 	Magnetometer magnetometer
 	Location     location
 	Temperature  float32
 	Pressure     float32
-	Lux 		 float32
-	
+	Lux          float32
 }
 
 func fromBuf(buf *bytes.Buffer) data {
 	return data{
-		Time: int32(binary.BigEndian.Uint32(buf.Next(4))),
+		Time: int32(binary.LittleEndian.Uint32(buf.Next(4))),
 		Orientation: orientation{
 			tripleCartesian: tripleCartesian{
-				X: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
-				Y: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
-				Z: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+				X: math.Float32frombits(binary.LittleEndian.Uint32(buf.Next(4))),
+				Y: math.Float32frombits(binary.LittleEndian.Uint32(buf.Next(4))),
+				Z: math.Float32frombits(binary.LittleEndian.Uint32(buf.Next(4))),
 			},
 		},
 		Gyroscope: gyroscope{
 			tripleCartesian: tripleCartesian{
-				X: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
-				Y: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
-				Z: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+				X: math.Float32frombits(binary.LittleEndian.Uint32(buf.Next(4))),
+				Y: math.Float32frombits(binary.LittleEndian.Uint32(buf.Next(4))),
+				Z: math.Float32frombits(binary.LittleEndian.Uint32(buf.Next(4))),
 			},
 		},
 		Acceleration: accelerometer{
 			tripleCartesian: tripleCartesian{
-				X: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
-				Y: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
-				Z: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+				X: math.Float32frombits(binary.LittleEndian.Uint32(buf.Next(4))),
+				Y: math.Float32frombits(binary.LittleEndian.Uint32(buf.Next(4))),
+				Z: math.Float32frombits(binary.LittleEndian.Uint32(buf.Next(4))),
 			},
-		},		
+		},
 		Magnetometer: magnetometer{
 			tripleCartesian: tripleCartesian{
-				X: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
-				Y: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
-				Z: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+				X: math.Float32frombits(binary.LittleEndian.Uint32(buf.Next(4))),
+				Y: math.Float32frombits(binary.LittleEndian.Uint32(buf.Next(4))),
+				Z: math.Float32frombits(binary.LittleEndian.Uint32(buf.Next(4))),
 			},
 		},
 		Location: location{
-			Latitude:  math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
-			Longitude: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
-			Altitude: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
+			Latitude:  math.Float32frombits(binary.LittleEndian.Uint32(buf.Next(4))),
+			Longitude: math.Float32frombits(binary.LittleEndian.Uint32(buf.Next(4))),
+			Altitude:  math.Float32frombits(binary.LittleEndian.Uint32(buf.Next(4))),
 		},
-		Temperature: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
-		Lux: math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
-		Pressure:    math.Float32frombits(binary.BigEndian.Uint32(buf.Next(4))),
-		
+		Temperature: math.Float32frombits(binary.LittleEndian.Uint32(buf.Next(4))),
+		Lux:         math.Float32frombits(binary.LittleEndian.Uint32(buf.Next(4))),
+		Pressure:    math.Float32frombits(binary.LittleEndian.Uint32(buf.Next(4))),
 	}
 }
