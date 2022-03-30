@@ -70,9 +70,9 @@
     rocket_long = msg.Location.Longitude;
     acceleration.add(msg.Acceleration.X, msg.Acceleration.Y, msg.Acceleration.Z);
     altitude_num.update((_) => msg.Location.Altitude);
-    x = msg.Orientation.X;
-    y = msg.Orientation.Y;
-    z = msg.Orientation.Z;
+    x = msg.Orientation.X * Math.PI / 180;
+    y = msg.Orientation.Y * Math.PI / 180;
+    z = msg.Orientation.Z * Math.PI / 180;
   };
 
 </script>
@@ -92,21 +92,21 @@
     >
       <Fullscreen>
         <div
-          class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full h-full"
+          class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full"
         >
-          <Chart id="top_left" title="Acceleration" bind:data={$acceleration} />
+          <Chart id="top_left" title="Acceleration" bind:data={$acceleration} yMax={30} yMin={-30}/>
         </div>
       </Fullscreen>
       <Fullscreen let:fullscreen>
         <div
-          class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full h-full"
+          class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full"
         >
           <Text generator={altitude_num} units="meters" {fullscreen} />
         </div>
       </Fullscreen>
       <Fullscreen>
         <div
-          class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full h-full"
+          class="bg-slate-800 text-white flex justify-center items-center rounded-xl h-full"
         >
           <Chart id="2" title="Altitude" bind:data={$simulation} />
         </div>

@@ -34,9 +34,9 @@
   export class RollingWindowChart extends LineChart {
     private maxSize: number;
 
-    constructor(maxSize: number, lines: { label: string; colour: string }[]) {
+    constructor(length: number, lines: { label: string; colour: string }[]) {
       super();
-      this.maxSize = maxSize;
+      this.maxSize = length;
       this.data = {
         datasets: lines.map((line) => ({
           label: line.label,
