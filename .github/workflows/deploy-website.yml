@@ -111,6 +111,6 @@ jobs:
             export HTML_PATH=${{ secrets.DEPLOY_PATH }}
             echo start server
             start-stop-daemon --start --background --exec $(realpath blackbox)
-            sleep 10 && curl -X POST http://live.imperialrocketry.com/end && exit
+            sleep 10 && curl -X POST https://live.imperialrocketry.com/end && exit
       
             
